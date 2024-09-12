@@ -1,21 +1,14 @@
 package com.MyApp.budgetControl.model;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
+import lombok.Value;
 
-import java.util.Date;
-@Data
-@AllArgsConstructor
-@Component
-@RequiredArgsConstructor
+@Value
 public class Expense {
 
-    private int expenseId;
-    private double expenseCost;
-    private String expenseCategory;
-    private String expenseComment;
-    private String expenseDate;
+    private final int expenseId;
+    private final double expenseCost;
+    private final String expenseCategory;
+    private final String expenseComment;
+    private final String expenseDate;
 
 }

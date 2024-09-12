@@ -2,24 +2,32 @@ package com.MyApp.budgetControl.controller;
 
 import com.MyApp.budgetControl.model.Expense;
 import com.MyApp.budgetControl.service.ExpenseService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @RestController
+@RequestMapping("/expenses")
+@RequiredArgsConstructor
 public class ExpensesController {
 
-    @Autowired
-    ExpenseService expenseService;
-    @RequestMapping("/expenses")
-    public List<Expense> getExpenses () {
+    private final ExpenseService expenseService;
+
+    @GetMapping
+    public List<Expense> getExpenses() {
         return expenseService.getExpenses();
-}
-    @RequestMapping("/expenses/{expenseId}")
-    public Expense getExpenseById (@PathVariable int expenseId) {
-        return expenseService.getExpenceById(expenseId);
+    }
+
+    @GetMapping("/{expenseId}")
+    public Expense getExpenseById(@PathVariable int expenseId) {
+        try {
+            return expenseService.getExpenseById(expenseId);
+        } catch (NoSuchElementException ex) {
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Expense Not Found", ex);
         }
+    }
 }
