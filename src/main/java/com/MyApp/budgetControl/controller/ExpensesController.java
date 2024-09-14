@@ -3,12 +3,13 @@ package com.MyApp.budgetControl.controller;
 import com.MyApp.budgetControl.model.Expense;
 import com.MyApp.budgetControl.service.ExpenseService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.server.ResponseStatusException;
+
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping("/expenses")
@@ -24,10 +25,6 @@ public class ExpensesController {
 
     @GetMapping("/{expenseId}")
     public Expense getExpenseById(@PathVariable int expenseId) {
-        try {
             return expenseService.getExpenseById(expenseId);
-        } catch (NoSuchElementException ex) {
-            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Expense Not Found", ex);
-        }
     }
 }

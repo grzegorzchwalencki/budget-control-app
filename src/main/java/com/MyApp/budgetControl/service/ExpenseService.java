@@ -2,7 +2,9 @@ package com.MyApp.budgetControl.service;
 
 import com.MyApp.budgetControl.model.Expense;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Arrays;
 import java.util.List;
@@ -22,6 +24,7 @@ public class ExpenseService {
     public Expense getExpenseById(int expenseId) {
         return expenses.stream()
                 .filter(e -> e.getExpenseId() == expenseId)
-                .findFirst().get();
+                .findFirst()
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, (String.format("Expense with Id: %d Not Found", expenseId))));
     }
 }
