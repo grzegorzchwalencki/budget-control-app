@@ -1,5 +1,6 @@
 package com.MyApp.budgetControl.controller;
 
+import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -19,7 +20,8 @@ class ExpensesControllerTest {
     private MockMvc mockMvc;
 
     @Test
-    void getExpensesMethodShouldReturnCode200andAppJsonContentType() throws Exception {
+    @SneakyThrows
+    void getExpensesMethodShouldReturnCode200andAppJsonContentType() {
         this.mockMvc.perform(get("/expenses"))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -27,7 +29,8 @@ class ExpensesControllerTest {
     }
 
     @Test
-    void getExpenseByIdMethodShouldReturnCode200andAppJsonContentType() throws Exception {
+    @SneakyThrows
+    void getExpenseByIdMethodShouldReturnCode200andAppJsonContentType() {
         this.mockMvc.perform(get("/expenses/101"))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -35,7 +38,8 @@ class ExpensesControllerTest {
     }
 
     @Test
-    void getExpenseByIdMethodForNotExisitngIdShouldReturnCode404() throws Exception {
+    @SneakyThrows
+    void getExpenseByIdMethodForNotExistingIdShouldReturnCode404() {
         this.mockMvc.perform(get("/expenses/100"))
                 .andDo(print())
                 .andExpect(status().isNotFound());
