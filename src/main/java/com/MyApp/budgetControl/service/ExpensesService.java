@@ -25,4 +25,8 @@ public class ExpensesService {
                 .findFirst()
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, (String.format("Expense with Id: %d Not Found", expenseId))));
     }
+
+    public void addNewExpense(Expense newExpense) {
+        expenseRepository.addNewExpenseToRepository(newExpense);
+    }
 }

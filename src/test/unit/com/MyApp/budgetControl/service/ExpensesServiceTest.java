@@ -2,6 +2,7 @@ package com.MyApp.budgetControl.service;
 
 import com.MyApp.budgetControl.model.Expense;
 import com.MyApp.budgetControl.repository.ExpenseRepository;
+import com.MyApp.budgetControl.service.ExpensesService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -58,7 +59,7 @@ class ExpensesServiceTest {
     }
 
     @Test
-    void getExpenseByIdFoNotExistingIdShouldThrowException() {
+    void getExpenseByIdForNotExistingIdShouldThrowException() {
         var service = new ExpensesService(mockRepository);
         ResponseStatusException exception = assertThrows(ResponseStatusException.class, () ->
                     service.getExpenseById(1));
