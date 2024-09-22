@@ -35,7 +35,7 @@ public class ExceptionHandler
                 .getFieldErrors()
                 .stream()
                 .map(x -> x.getDefaultMessage())
-                .collect(Collectors.toList());
+                .toList();
 
         objectBody.put("Errors", exceptionalErrors);
 
