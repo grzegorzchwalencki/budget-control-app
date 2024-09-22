@@ -1,7 +1,7 @@
 package com.MyApp.budgetControl.controller;
 
 import com.MyApp.budgetControl.model.Expense;
-import com.MyApp.budgetControl.service.ExpenseService;
+import com.MyApp.budgetControl.service.ExpensesService;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.web.bind.annotation.PathVariable;
@@ -16,15 +16,15 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ExpensesController {
 
-    private final ExpenseService expenseService;
+    private final ExpensesService expensesService;
 
     @GetMapping
     public List<Expense> getExpenses() {
-        return expenseService.getExpenses();
+        return expensesService.getExpenses();
     }
 
     @GetMapping("/{expenseId}")
     public Expense getExpenseById(@PathVariable int expenseId) {
-            return expenseService.getExpenseById(expenseId);
+            return expensesService.getExpenseById(expenseId);
     }
 }
