@@ -9,7 +9,7 @@ import java.util.List;
 
 @Getter
 @RequiredArgsConstructor
-public class ErrorResponse {
+class ErrorResponse {
 
     private final int statusCode;
     private final List<String> errorDetails;
