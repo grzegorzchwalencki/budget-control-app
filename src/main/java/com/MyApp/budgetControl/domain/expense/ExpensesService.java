@@ -1,15 +1,11 @@
-package com.MyApp.budgetControl.service;
+package com.MyApp.budgetControl.domain.expense;
 
-import com.MyApp.budgetControl.model.Expense;
-import com.MyApp.budgetControl.repository.ExpenseRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-
-
 
 @Service
 @RequiredArgsConstructor

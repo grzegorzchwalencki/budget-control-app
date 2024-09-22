@@ -1,15 +1,15 @@
-package com.MyApp.budgetControl.controller;
+package com.MyApp.budgetControl.api;
 
-import com.MyApp.budgetControl.model.Expense;
-import com.MyApp.budgetControl.service.ExpensesService;
+import com.MyApp.budgetControl.domain.expense.Expense;
+import com.MyApp.budgetControl.domain.expense.ExpensesService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,9 +33,11 @@ public class ExpensesController {
             return expensesService.getExpenseById(expenseId);
     }
 
+//    @ExceptionHandler(value = ExceptionHandler.class)
     @PostMapping
-    public ResponseEntity<Expense> addNewExpense(@Valid @RequestBody Expense newExpense) {
+    @ResponseStatus(HttpStatus.CREATED)
+    public Expense addNewExpense(@Valid @RequestBody Expense newExpense) {
         expensesService.addNewExpense(newExpense);
-        return new ResponseEntity<>(newExpense, HttpStatus.CREATED);
+        return newExpense;
     }
 }

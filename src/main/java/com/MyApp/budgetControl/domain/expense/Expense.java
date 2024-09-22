@@ -1,4 +1,4 @@
-package com.MyApp.budgetControl.model;
+package com.MyApp.budgetControl.domain.expense;
 
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Min;
@@ -7,11 +7,13 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Value;
 
+import java.util.UUID;
+
 @Value
 public class Expense {
 
-    @NotNull
-    @Min(101)
+    @NotNull(message = "Id is mandatory")
+    @Min(value = 101, message = "Id must be grater than or equal to 101")
     private final long expenseId;
 
     @NotNull(message = "Cost value is mandatory")

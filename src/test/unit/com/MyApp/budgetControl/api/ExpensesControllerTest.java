@@ -1,13 +1,18 @@
-package com.MyApp.budgetControl.controller;
+package com.MyApp.budgetControl.api;
 
-import com.MyApp.budgetControl.model.Expense;
+import com.MyApp.budgetControl.domain.expense.Expense;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvFileSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -50,7 +55,8 @@ class ExpensesControllerTest {
     }
 
     @Test
-    void postNewExpenseWithAllFieldsCorrectShouldAddToRepositoryAndReturnStatusCreated() throws Exception {
+    @SneakyThrows
+    void postNewExpenseWithAllFieldsCorrectShouldAddToRepositoryAndReturnStatusCreated() {
         Expense newExpense = new Expense(
                 104,
                 99.00,
@@ -63,6 +69,23 @@ class ExpensesControllerTest {
                 .andDo(print())
                 .andExpect(status().isCreated())
                 .andExpect(content().json("{\"expenseId\":104,\"expenseCost\":99.00,\"expenseCategory\":\"test category\",\"expenseComment\":\"test comment\",\"expenseDate\":\"17.09.2024\"}"));
+    }
+
+    @SneakyThrows
+    @ParameterizedTest
+    @CsvFileSource(resources = "/postTestData.csv", numLinesToSkip = 1)
+    void postNewExpenseWithInvalidFieldsShouldReturnErrorResponse(@RequestBody long expenseId, int expenseCost, String expenseCategory, String expenseComment, String expenseDate) {
+        Expense newExpense = new Expense(
+                expenseId,
+                expenseCost,
+                expenseCategory,
+                expenseComment,
+                expenseDate);
+        mockMvc.perform(post("/expenses")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(newExpense)))
+                .andDo(print())
+                .andExpect(status().isBadRequest());
     }
 
 }

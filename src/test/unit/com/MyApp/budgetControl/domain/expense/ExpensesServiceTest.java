@@ -1,8 +1,5 @@
-package com.MyApp.budgetControl.service;
+package com.MyApp.budgetControl.domain.expense;
 
-import com.MyApp.budgetControl.model.Expense;
-import com.MyApp.budgetControl.repository.ExpenseRepository;
-import com.MyApp.budgetControl.service.ExpensesService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
