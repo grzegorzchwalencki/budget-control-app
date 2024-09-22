@@ -18,6 +18,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
@@ -74,7 +75,7 @@ class ExpensesControllerTest {
     @SneakyThrows
     @ParameterizedTest
     @CsvFileSource(resources = "/postTestData.csv", numLinesToSkip = 1)
-    void postNewExpenseWithInvalidFieldsShouldReturnErrorResponse(@RequestBody long expenseId, int expenseCost, String expenseCategory, String expenseComment, String expenseDate) {
+    void postNewExpenseWithInvalidFieldsShouldReturnErrorResponse(@RequestBody long expenseId, int expenseCost, String expenseCategory, String expenseComment, String expenseDate, String expectedMessage) {
         Expense newExpense = new Expense(
                 expenseId,
                 expenseCost,
@@ -85,7 +86,8 @@ class ExpensesControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(newExpense)))
                 .andDo(print())
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.errorDetails").value(expectedMessage));
     }
 
 }

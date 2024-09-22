@@ -19,9 +19,17 @@ public class ErrorResponse {
         return  new ErrorResponse(HttpStatus.BAD_REQUEST.value(), errorDetails, ErrorType.VALIDATION_ERROR);
     }
 
+    public static ErrorResponse forUnhandledError(List<String> errorDetails) {
+        return  new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), errorDetails, ErrorType.UNHANDLED_ERROR);
+    }
+
+    public static ErrorResponse forNotFoundError(List<String> errorDetails) {
+        return  new ErrorResponse(HttpStatus.NOT_FOUND.value(), errorDetails, ErrorType.RESPONSE_STATUS_ERROR);
+    }
     enum ErrorType {
         VALIDATION_ERROR,
-        UNHANDLED_ERROR
+        RESPONSE_STATUS_ERROR,
+        UNHANDLED_ERROR,
     }
 
 }

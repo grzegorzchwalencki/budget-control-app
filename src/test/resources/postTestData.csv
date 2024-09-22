@@ -1,4 +1,8 @@
-expenseId, expenseCost, expenseCategory, expenseComment, expenseDate
-0, -1,CategoryLengthmMreThan64charsCategoryLengthmMreThan64chars1234567,CommentLengthMoreThan128charsCommentLengthMoreThan128charsCommentLengthMoreThan128charsCommentLengthMoreThan128chars1234567890123, 10.10.2024
-999, -1,,,
-101, 0, s, t, 1
+expenseId, expenseCost, expenseCategory, expenseComment, expenseDate, expectedMessage
+0, 10,category,comment, 10.10.2024,         Id must be grater than or equal to 101
+101, -10,category,comment, 10.10.2024,      Cost value should be positive
+101, 10,CategoryLengthmMreThan64charsCategoryLengthmMreThan64chars1234567,comment, 10.10.2024, Category max length is 64 char
+101, 10,category,CommentLengthMoreThan128charsCommentLengthMoreThan128charsCommentLengthMoreThan128charsCommentLengthMoreThan128chars1234567890123, 10.10.2024 , Comment max length is 128 char
+101, 10,,comment, 10.10.2024 ,              Category is mandatory
+101, 10,category,, 10.10.2024 ,             Comment is mandatory
+101, 10,category,comment, ,                 Date is mandatory
