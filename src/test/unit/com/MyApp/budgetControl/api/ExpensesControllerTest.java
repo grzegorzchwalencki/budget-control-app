@@ -31,7 +31,8 @@ class ExpensesControllerTest {
     private ObjectMapper objectMapper;
 
     @Test
-    void getExpensesMethodShouldReturnCode200andAppJsonContentType() throws Exception {
+    @SneakyThrows
+    void getExpensesMethodShouldReturnCode200andAppJsonContentType() {
         mockMvc.perform(get("/expenses"))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -39,7 +40,8 @@ class ExpensesControllerTest {
     }
 
     @Test
-    void getExpenseByIdMethodShouldReturnCode200andAppJsonContentType() throws Exception {
+    @SneakyThrows
+    void getExpenseByIdMethodShouldReturnCode200andAppJsonContentType() {
         mockMvc.perform(get("/expenses/101"))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -48,7 +50,8 @@ class ExpensesControllerTest {
     }
 
     @Test
-    void getExpenseByIdMethodForNotExistingIdShouldReturnCode404() throws Exception {
+    @SneakyThrows
+    void getExpenseByIdMethodForNotExistingIdShouldReturnCode404() {
         mockMvc.perform(get("/expenses/100"))
                 .andDo(print())
                 .andExpect(status().isNotFound())
