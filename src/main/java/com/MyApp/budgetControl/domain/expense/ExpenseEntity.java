@@ -2,8 +2,6 @@ package com.MyApp.budgetControl.domain.expense;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.DecimalMin;
@@ -27,16 +25,15 @@ import java.util.UUID;
 @Value
 public class ExpenseEntity {
 
-    public ExpenseEntity(ExpenseDTO expenseDTO) {
+    public ExpenseEntity(ExpenseRequestDTO expenseRequestDTO) {
         this.expenseId = UUID.randomUUID();
-        this.expenseCost = expenseDTO.getExpenseCost();
-        this.expenseCategory = expenseDTO.getExpenseCategory();
-        this.expenseComment = expenseDTO.getExpenseComment();
+        this.expenseCost = expenseRequestDTO.getExpenseCost();
+        this.expenseCategory = expenseRequestDTO.getExpenseCategory();
+        this.expenseComment = expenseRequestDTO.getExpenseComment();
         this.expenseDate = Instant.now();
     }
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private final UUID expenseId;
 
     @NotNull(message = "Cost value is mandatory")

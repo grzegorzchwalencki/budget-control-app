@@ -54,7 +54,7 @@ class ExpensesServiceTest {
 
     @Test
     void getExpenseByIdForExistingIdIsReturningCorrectExpense() {
-        when(mockRepository.findById(rndUUID2)).thenReturn(Optional.of(new ExpenseEntity(rndUUID2, 10.00, "eating out ", "chinese food", date)));
+        when(mockRepository.findByExpenseId(rndUUID2)).thenReturn(Optional.of(new ExpenseEntity(rndUUID2, 10.00, "eating out ", "chinese food", date)));
         ExpenseEntity result = subject.findExpenseById(rndUUID2);
         ExpenseEntity expected = new ExpenseEntity(
                 rndUUID2,

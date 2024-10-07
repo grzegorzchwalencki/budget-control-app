@@ -8,7 +8,7 @@ import jakarta.validation.constraints.Size;
 import lombok.Value;
 
 @Value
-public class ExpenseDTO {
+public class ExpenseRequestDTO {
 
     @NotNull(message = "Cost value is mandatory")
     @DecimalMin(value = "0.01", message = "Cost value should be positive")
