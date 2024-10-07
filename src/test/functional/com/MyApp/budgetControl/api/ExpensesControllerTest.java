@@ -33,10 +33,9 @@ class ExpensesControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
-
     @Test
     @SneakyThrows
-    void getExpensesMethodShouldReturnCode200andAppJsonContentType() {
+    void getExpensesMethodShouldReturnAllExistingRecordsCode200andAppJsonContentType() {
         mockMvc.perform(get("/expenses"))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -47,7 +46,21 @@ class ExpensesControllerTest {
 
     @Test
     @SneakyThrows
-    void getExpenseByIdMethodShouldReturnCode200andAppJsonContentType() {
+    void requestCausingToUnhandledErrorShouldReturnErrorResponseCatchUnhandledError() {
+        mockMvc.perform(get("/expensesnotvalidendpoint"))
+                .andDo(print())
+                .andExpect(status().isInternalServerError())
+                .andExpect(content().contentType("application/json"))
+                .andExpect(content().json(
+                        "{\"statusCode\":500," +
+                        "\"errorDetails\":[\"Unknown error occured\"," +
+                        "\"org.springframework.web.servlet.resource.NoResourceFoundException\"," +
+                        "\"No static resource expensesnotvalidendpoint.\"],\"errorType\":\"UNHANDLED_ERROR\"}"));
+    }
+
+    @Test
+    @SneakyThrows
+    void getExpenseByIdMethodShouldReturnCode200andAppJsonContentTypeWithCorrectJsonContent() {
         mockMvc.perform(get("/expenses/caf8b686-b9b6-40ef-bdb8-e75a7911164b"))
                 .andDo(print())
                 .andExpect(status().isOk())
@@ -57,11 +70,14 @@ class ExpensesControllerTest {
 
     @Test
     @SneakyThrows
-    void getExpenseByIdMethodForNotExistingIdShouldReturnCode404() {
+    void getExpenseByIdMethodForNotExistingIdShouldReturnCode404HandlingNoSuchElementException() {
         mockMvc.perform(get("/expenses/1f76ff4a-d3e6-479e-b74f-8628c4d5adc9"))
                 .andDo(print())
                 .andExpect(status().isNotFound())
-                .andExpect(content().contentType("application/json"));
+                .andExpect(content().contentType("application/json"))
+                .andExpect(content().json("{\"statusCode\":404," +
+                        "\"errorDetails\":[\"Expense with given Id does not exist\"]," +
+                        "\"errorType\":\"NOT_FOUND_ERROR\"}"));
     }
 
     @Test
@@ -78,7 +94,8 @@ class ExpensesControllerTest {
     @SneakyThrows
     @ParameterizedTest
     @CsvFileSource(resources = "/postTestData.csv", numLinesToSkip = 1)
-    void postNewExpenseWithInvalidFieldsShouldReturnErrorResponse(@RequestBody int expenseCost, String expenseCategory, String expenseComment, String expectedMessage) {
+    void postNewExpenseWithInvalidFieldsShouldReturnErrorResponseHandlingMethodArgumentNotValidException
+            (@RequestBody int expenseCost, String expenseCategory, String expenseComment, String expectedMessage) {
         ExpenseEntity newExpense = new ExpenseEntity(
                 null,
                 expenseCost,
