@@ -1,6 +1,6 @@
 package com.MyApp.budgetControl.api;
 
-import com.MyApp.budgetControl.domain.expense.Expense;
+import com.MyApp.budgetControl.domain.expense.ExpenseEntity;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
@@ -11,9 +11,11 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 
+import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -23,6 +25,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@Sql("/initial-data.sql")
 class ExpensesControllerTest {
 
     @Autowired
@@ -30,61 +33,58 @@ class ExpensesControllerTest {
     @Autowired
     private ObjectMapper objectMapper;
 
+
     @Test
     @SneakyThrows
     void getExpensesMethodShouldReturnCode200andAppJsonContentType() {
         mockMvc.perform(get("/expenses"))
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(content().contentType("application/json"));
+                .andExpect(content().contentType("application/json"))
+                .andExpect(jsonPath("$[*].expenseCategory")
+                        .value(containsInAnyOrder("test category 1", "test category 2", "test category 3", "test category 4")));
     }
 
     @Test
     @SneakyThrows
     void getExpenseByIdMethodShouldReturnCode200andAppJsonContentType() {
-        mockMvc.perform(get("/expenses/101"))
+        mockMvc.perform(get("/expenses/caf8b686-b9b6-40ef-bdb8-e75a7911164b"))
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json"))
-                .andExpect(content().json("{\"expenseId\":101,\"expenseCost\":49.99,\"expenseCategory\":\"groceries\",\"expenseComment\":\"Biedronka market\",\"expenseDate\":\"07.09.2024\"}"));
+                .andExpect(content().json("{\"expenseCost\":999.0,\"expenseCategory\":\"test category 2\",\"expenseComment\":\"test comment 2\"}"));
     }
 
     @Test
     @SneakyThrows
     void getExpenseByIdMethodForNotExistingIdShouldReturnCode404() {
-        mockMvc.perform(get("/expenses/100"))
+        mockMvc.perform(get("/expenses/1f76ff4a-d3e6-479e-b74f-8628c4d5adc9"))
                 .andDo(print())
                 .andExpect(status().isNotFound())
-                .andExpect(content().contentType("application/problem+json"));
+                .andExpect(content().contentType("application/json"));
     }
 
     @Test
     @SneakyThrows
     void postNewExpenseWithAllFieldsCorrectShouldAddToRepositoryAndReturnStatusCreated() {
-        Expense newExpense = new Expense(
-                104,
-                99.00,
-                "test category",
-                "test comment",
-                "17.09.2024");
         mockMvc.perform(post("/expenses")
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(objectMapper.writeValueAsString(newExpense)))
+                    .content("{\"expenseCost\":99.0,\"expenseCategory\":\"test category\",\"expenseComment\":\"test comment\"}"))
                 .andDo(print())
                 .andExpect(status().isCreated())
-                .andExpect(content().json("{\"expenseId\":104,\"expenseCost\":99.00,\"expenseCategory\":\"test category\",\"expenseComment\":\"test comment\",\"expenseDate\":\"17.09.2024\"}"));
+                .andExpect(content().json("{\"expenseCost\":99.00,\"expenseCategory\":\"test category\",\"expenseComment\":\"test comment\"}"));
     }
 
     @SneakyThrows
     @ParameterizedTest
     @CsvFileSource(resources = "/postTestData.csv", numLinesToSkip = 1)
-    void postNewExpenseWithInvalidFieldsShouldReturnErrorResponse(@RequestBody long expenseId, int expenseCost, String expenseCategory, String expenseComment, String expenseDate, String expectedMessage) {
-        Expense newExpense = new Expense(
-                expenseId,
+    void postNewExpenseWithInvalidFieldsShouldReturnErrorResponse(@RequestBody int expenseCost, String expenseCategory, String expenseComment, String expectedMessage) {
+        ExpenseEntity newExpense = new ExpenseEntity(
+                null,
                 expenseCost,
                 expenseCategory,
                 expenseComment,
-                expenseDate);
+                null );
         mockMvc.perform(post("/expenses")
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(objectMapper.writeValueAsString(newExpense)))

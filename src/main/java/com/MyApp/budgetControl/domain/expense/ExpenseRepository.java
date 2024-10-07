@@ -1,10 +1,7 @@
 package com.MyApp.budgetControl.domain.expense;
 
-import java.util.List;
+import org.springframework.data.repository.CrudRepository;
 
-public interface ExpenseRepository {
+import java.util.UUID;
 
-    List<Expense> getExpensesFromRepository();
-
-    void addNewExpenseToRepository(Expense newExpense);
-}
+public interface ExpenseRepository extends CrudRepository<ExpenseEntity, UUID> {}
