@@ -24,11 +24,11 @@ class ErrorResponse {
     }
 
     public static ErrorResponse forNotFoundError(List<String> errorDetails) {
-        return  new ErrorResponse(HttpStatus.NOT_FOUND.value(), errorDetails, ErrorType.RESPONSE_STATUS_ERROR);
+        return  new ErrorResponse(HttpStatus.NOT_FOUND.value(), errorDetails, ErrorType.NOT_FOUND_ERROR);
     }
     enum ErrorType {
         VALIDATION_ERROR,
-        RESPONSE_STATUS_ERROR,
+        NOT_FOUND_ERROR,
         UNHANDLED_ERROR,
     }
 

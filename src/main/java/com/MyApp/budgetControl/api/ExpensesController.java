@@ -1,6 +1,7 @@
 package com.MyApp.budgetControl.api;
 
-import com.MyApp.budgetControl.domain.expense.Expense;
+import com.MyApp.budgetControl.domain.expense.ExpenseDTO;
+import com.MyApp.budgetControl.domain.expense.ExpenseEntity;
 import com.MyApp.budgetControl.domain.expense.ExpensesService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/expenses")
@@ -24,20 +26,21 @@ public class ExpensesController {
     private final ExpensesService expensesService;
 
     @GetMapping
-    public List<Expense> getExpenses() {
-        return expensesService.getExpenses();
+    public List<ExpenseEntity> getExpenses() {
+        return expensesService.findAllExpenses();
     }
 
     @GetMapping("/{expenseId}")
-    public Expense getExpenseById(@PathVariable int expenseId) {
-            return expensesService.getExpenseById(expenseId);
+    public ExpenseEntity getExpenseById(@PathVariable UUID expenseId) {
+            return expensesService.findExpenseById(expenseId);
     }
 
 //    @ExceptionHandler(value = ExceptionHandler.class)
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Expense addNewExpense(@Valid @RequestBody Expense newExpense) {
-        expensesService.addNewExpense(newExpense);
-        return newExpense;
+    public ExpenseEntity addNewExpense(@Valid @RequestBody ExpenseDTO newExpense) {
+        ExpenseEntity expense = new ExpenseEntity(newExpense);
+        expensesService.saveExpense(expense);
+        return expense;
     }
 }
