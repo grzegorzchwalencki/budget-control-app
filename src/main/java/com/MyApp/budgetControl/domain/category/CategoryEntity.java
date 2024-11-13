@@ -1,8 +1,6 @@
-package com.MyApp.budgetControl.domain.expense.category;
+package com.MyApp.budgetControl.domain.category;
 
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
@@ -11,20 +9,22 @@ import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
 
+import java.util.UUID;
+
 @Value
 @Entity
 @RequiredArgsConstructor
 @Table(name = "categories")
 @NoArgsConstructor(force = true)
-public class CategoryEntity {
+class CategoryEntity {
 
-  public CategoryEntity(CategoryDTO categoryDTO) {
-    this.categoryName = categoryDTO.getCategoryName();
+CategoryEntity(CategoryRequestDTO categoryRequestDTO) {
+    this.id = UUID.randomUUID().toString();
+    this.categoryName = categoryRequestDTO.getCategoryName();
   }
 
   @Id
-  @GeneratedValue(strategy = GenerationType.AUTO)
-  private final Long id = null;
+  private final String id;
 
   @NotBlank(message = "Category name is mandatory")
   @Size(max = 64, message = "Category name max length is 64 char")

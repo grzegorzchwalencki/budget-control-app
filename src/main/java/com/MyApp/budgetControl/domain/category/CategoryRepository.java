@@ -1,8 +1,8 @@
-package com.MyApp.budgetControl.domain.expense.category;
+package com.MyApp.budgetControl.domain.category;
 
 import java.util.List;
 
-public interface CategoryRepository {
+interface CategoryRepository {
 
   CategoryEntity save(CategoryEntity newCategory);
 

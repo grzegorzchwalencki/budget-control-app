@@ -1,8 +1,8 @@
 package com.MyApp.budgetControl.api;
 
-import com.MyApp.budgetControl.domain.expense.category.CategoryDTO;
-import com.MyApp.budgetControl.domain.expense.category.CategoryEntity;
-import com.MyApp.budgetControl.domain.expense.category.CategoryService;
+import com.MyApp.budgetControl.domain.category.CategoryRequestDTO;
+import com.MyApp.budgetControl.domain.category.CategoryResponseDTO;
+import com.MyApp.budgetControl.domain.category.CategoryService;
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -23,14 +23,12 @@ public class CategoryController {
 
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
-  public CategoryEntity addNewCategory(@Valid @RequestBody CategoryDTO newCategory) {
-    CategoryEntity category = new CategoryEntity(newCategory);
-    categoryService.saveCategory(category);
-    return category;
+  public void addNewCategory(@Valid @RequestBody CategoryRequestDTO newCategory) {
+    categoryService.saveCategory(newCategory);
   }
 
   @GetMapping
-  public List<CategoryEntity> getCategories() {
+  public List<CategoryResponseDTO> getCategories() {
     return categoryService.findAllCategories();
   }
 }

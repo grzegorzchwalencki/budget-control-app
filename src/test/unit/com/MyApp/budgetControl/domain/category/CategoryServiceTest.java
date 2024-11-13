@@ -1,10 +1,11 @@
-package com.MyApp.budgetControl.domain.expense.category;
+package com.MyApp.budgetControl.domain.category;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
 import java.util.Arrays;
 import java.util.List;
+
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -25,17 +26,15 @@ public class CategoryServiceTest {
   @BeforeAll
   static void setup() {
     categories = Arrays.asList(
-        new CategoryEntity("groceries"),
-        new CategoryEntity("health"));
+        new CategoryEntity( new CategoryRequestDTO("groceries")),
+        new CategoryEntity(new CategoryRequestDTO("health")));
   }
 
   @Test
-  void getCategoriesShouldReturnAtLeastOneExpanse() {
+  void getCategoriesShouldReturnAtLeastOneCategory() {
     when(mockRepository.findAll()).thenReturn(categories);
-    List<CategoryEntity> categories = subject.findAllCategories();
-    CategoryEntity expected = new CategoryEntity(
-        "groceries"
-    );
-    assertTrue(categories.contains(expected));
+    List<CategoryResponseDTO> categories = subject.findAllCategories();
+    String expectedCategoryName = "health";
+    assertTrue(categories.stream().anyMatch(x -> x.getCategoryName().equals(expectedCategoryName)));
   }
 }

@@ -52,13 +52,14 @@ public class CategoryControllerTest {
             .contentType(MediaType.APPLICATION_JSON)
             .content("{\"categoryName\":\"shopping\"}"))
         .andDo(print())
-        .andExpect(status().isCreated())
-        .andExpect(content().json("{\"id\":3,\"categoryName\":\"shopping\"}"));
+        .andExpect(status().isCreated());
+    mockMvc.perform(get("/categories"))
+        .andExpect(jsonPath("$[*].categoryName").value("shopping"));
   }
 
   @Test
   @SneakyThrows
-  void postNewCategoryWithoutInvalidFieldsShouldReturnErrorResponseHandlingMethodArgumentNotValidException() {
+  void postNewCategoryWithCategoryNameEmptyShouldReturnErrorResponseHandlingMethodArgumentNotValidException() {
     mockMvc.perform(post("/categories")
             .contentType(MediaType.APPLICATION_JSON)
             .content("{\"categoryName\": \" \" }"))

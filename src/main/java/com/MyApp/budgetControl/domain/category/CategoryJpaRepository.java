@@ -1,9 +1,9 @@
-package com.MyApp.budgetControl.domain.expense.category;
+package com.MyApp.budgetControl.domain.category;
 
 import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface CategoryJpaRepository extends CategoryRepository, JpaRepository<CategoryEntity, Long> {
+interface CategoryJpaRepository extends CategoryRepository, JpaRepository<CategoryEntity, String> {
 
   CategoryEntity save(CategoryEntity newCategory);
   List<CategoryEntity> findAll();
