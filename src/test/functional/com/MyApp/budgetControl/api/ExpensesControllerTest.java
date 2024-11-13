@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@Sql("/initial-data.sql")
+@Sql("/initial-data-expenses.sql")
 class ExpensesControllerTest {
 
   @Autowired

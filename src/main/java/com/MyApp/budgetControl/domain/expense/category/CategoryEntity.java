@@ -6,6 +6,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
@@ -26,6 +27,7 @@ public class CategoryEntity {
   private final Long id = null;
 
   @NotBlank(message = "Category name is mandatory")
+  @Size(max = 64, message = "Category name max length is 64 char")
   private final String categoryName;
 
 }
