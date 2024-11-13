@@ -1,15 +1,19 @@
 package com.MyApp.budgetControl.domain.expense;
 
-import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.web.server.ResponseStatusException;
 
+import java.time.Instant;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -24,42 +28,48 @@ class ExpensesServiceTest {
 
     @InjectMocks
     ExpensesService subject;
-
-    @BeforeEach
-    public void setup() {
-        when(mockRepository.getExpensesFromRepository()).thenReturn(Arrays.asList(
-                new Expense(101, 49.99, "groceries","Biedronka market", "07.09.2024"),
-                new Expense(102, 10.00, "eating out ", "chinese food", "09.09.2024")));
-    }
+    static Instant date = new Date().toInstant();
+    static UUID rndUUID1 =  UUID.randomUUID(), rndUUID2 =  UUID.randomUUID();
+    static List<ExpenseEntity> expenses;
+    @BeforeAll
+    static void setup() {
+        expenses = Arrays.asList(
+                new ExpenseEntity(rndUUID1, 49.99, "groceries","Biedronka market", date),
+                new ExpenseEntity(rndUUID2,10.00, "eating out ", "chinese food", date));
+        }
 
     @Test
     void getExpensesShouldReturnAtLeastOneExpanse() {
-        List<Expense> expanses = subject.getExpenses();
-        Expense expected = new Expense(
-                101,
+        when(mockRepository
+                .findAll()).thenReturn(expenses);
+        List<ExpenseEntity> expanses = subject.findAllExpenses();
+        ExpenseEntity expected = new ExpenseEntity(
+                rndUUID1,
                 49.99,
                 "groceries",
                 "Biedronka market",
-                "07.09.2024");
+                date);
         assertTrue(expanses.contains(expected));
     }
 
     @Test
     void getExpenseByIdForExistingIdIsReturningCorrectExpense() {
-        Expense result = subject.getExpenseById(102);
-        Expense expected = new Expense(
-                102,
+        when(mockRepository.findByExpenseId(rndUUID2)).thenReturn(Optional.of(new ExpenseEntity(rndUUID2, 10.00, "eating out ", "chinese food", date)));
+        ExpenseEntity result = subject.findExpenseById(rndUUID2);
+        ExpenseEntity expected = new ExpenseEntity(
+                rndUUID2,
                 10.00,
                 "eating out ",
                 "chinese food",
-                "09.09.2024");
+                date);
         assertEquals(expected, result);
     }
 
     @Test
     void getExpenseByIdFoNotExistingIdShouldThrowException() {
-        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () ->
-                    subject.getExpenseById(1));
-            assertEquals("404 NOT_FOUND \"Expense with Id: 1 Not Found\"", exception.getMessage());
+        UUID randomUUID = UUID.randomUUID();
+        NoSuchElementException exception = assertThrows(NoSuchElementException.class, () ->
+                    subject.findExpenseById(randomUUID));
+            assertEquals("No value present", exception.getMessage());
         }
 }

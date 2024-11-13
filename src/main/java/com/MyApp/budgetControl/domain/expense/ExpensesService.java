@@ -1,11 +1,10 @@
 package com.MyApp.budgetControl.domain.expense;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -13,16 +12,15 @@ public class ExpensesService {
 
     private final ExpenseRepository expenseRepository;
 
-    public List<Expense> getExpenses() {return expenseRepository.getExpensesFromRepository();}
-
-    public Expense getExpenseById(int expenseId) {
-        return expenseRepository.getExpensesFromRepository().stream()
-                .filter(e -> e.getExpenseId() == expenseId)
-                .findFirst()
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, (String.format("Expense with Id: %d Not Found", expenseId))));
+    public void saveExpense(ExpenseEntity newExpense){
+        expenseRepository.save(newExpense);
     }
 
-    public void addNewExpense(Expense newExpense) {
-        expenseRepository.addNewExpenseToRepository(newExpense);
+    public List<ExpenseEntity> findAllExpenses() {
+        return expenseRepository.findAll();
+    }
+
+    public ExpenseEntity findExpenseById(UUID expenseId) {
+        return expenseRepository.findByExpenseId(expenseId).get();
     }
 }
