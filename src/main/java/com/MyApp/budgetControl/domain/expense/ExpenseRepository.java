@@ -6,9 +6,11 @@ import java.util.UUID;
 
 interface ExpenseRepository {
 
-    ExpenseEntity save(ExpenseEntity newExpense);
+  ExpenseEntity save(ExpenseEntity newExpense);
 
-    List<ExpenseEntity> findAll();
+  List<ExpenseEntity> findAll();
 
-    Optional<ExpenseEntity> findByExpenseId(UUID expenseId);
+  Optional<ExpenseEntity> findByExpenseId(UUID expenseId);
+
+  void deleteByExpenseId(UUID expenseId);
 }
