@@ -1,6 +1,7 @@
 package com.MyApp.budgetControl.api;
 
 import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -109,4 +110,27 @@ class ExpensesControllerTest {
               .andExpect(jsonPath("$.errorDetails").value(expectedMessage));
   }
 
+  @Test
+  @SneakyThrows
+  void deleteExpenseShouldRemoveItFromRepositoryAndReturnStatusAccepted() {
+    mockMvc.perform(delete("/expenses/ff4d7eba-f503-4d6a-8e29-10cc1f4ca56d")
+            .contentType(MediaType.APPLICATION_JSON))
+        .andDo(print())
+        .andExpect(status().isAccepted());
+    mockMvc.perform(get("/expenses/ff4d7eba-f503-4d6a-8e29-10cc1f4ca56d")
+            .contentType(MediaType.APPLICATION_JSON))
+        .andDo(print())
+        .andExpect(status().isNotFound())
+        .andExpect(jsonPath("$.errorDetails").value("Expense with given Id does not exist"));
+  }
+
+  @Test
+  @SneakyThrows
+  void deleteExpenseThatNotExistShouldThrowAnExceptionAndReturnStatusNotFound() {
+    mockMvc.perform(delete("/expenses/ff4d7eba-f503-4d6a-8e29-11cc11111111")
+            .contentType(MediaType.APPLICATION_JSON))
+        .andDo(print())
+        .andExpect(status().isNotFound())
+        .andExpect(jsonPath("$.errorDetails").value("Expense with given Id does not exist"));
+  }
 }

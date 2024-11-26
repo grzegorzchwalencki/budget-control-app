@@ -11,4 +11,6 @@ interface ExpenseRepository {
   List<ExpenseEntity> findAll();
 
   Optional<ExpenseEntity> findByExpenseId(UUID expenseId);
+
+  void deleteByExpenseId(UUID expenseId);
 }

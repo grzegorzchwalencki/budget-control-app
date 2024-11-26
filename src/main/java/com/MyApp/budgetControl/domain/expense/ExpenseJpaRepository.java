@@ -13,4 +13,6 @@ public interface ExpenseJpaRepository extends ExpenseRepository, JpaRepository<E
   List<ExpenseEntity> findAll();
 
   Optional<ExpenseEntity> findByExpenseId(UUID expenseId);
+
+  void deleteByExpenseId(UUID expenseId);
 }

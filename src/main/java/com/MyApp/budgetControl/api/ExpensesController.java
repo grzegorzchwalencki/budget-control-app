@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -40,5 +41,14 @@ public class ExpensesController {
     ExpenseEntity expense = new ExpenseEntity(newExpense);
     expensesService.saveExpense(expense);
     return expense;
+  }
+
+  @DeleteMapping("/{expenseId}")
+  @ResponseStatus(HttpStatus.ACCEPTED)
+  public void deleteExpense(@PathVariable UUID expenseId) {
+    ExpenseEntity expense = expensesService.findExpenseById(expenseId);
+    if (expense != null) {
+      expensesService.deleteExpenseById(expenseId);
+    }
   }
 }
