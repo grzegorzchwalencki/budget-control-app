@@ -2,17 +2,16 @@ package com.MyApp.budgetControl.domain.expense;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ExpenseJpaRepository extends ExpenseRepository, JpaRepository<ExpenseEntity, UUID> {
+interface ExpenseJpaRepository extends ExpenseRepository, JpaRepository<ExpenseEntity, String> {
   ExpenseEntity save(ExpenseEntity newExpense);
 
   List<ExpenseEntity> findAll();
 
-  Optional<ExpenseEntity> findByExpenseId(UUID expenseId);
+  Optional<ExpenseEntity> findByExpenseId(String expenseId);
 
-  void deleteByExpenseId(UUID expenseId);
+  void deleteByExpenseId(String expenseId);
 }

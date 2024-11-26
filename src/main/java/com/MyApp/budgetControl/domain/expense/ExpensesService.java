@@ -2,7 +2,6 @@ package com.MyApp.budgetControl.domain.expense;
 
 import jakarta.transaction.Transactional;
 import java.util.List;
-import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -12,20 +11,22 @@ public class ExpensesService {
 
   private final ExpenseRepository expenseRepository;
 
-  public void saveExpense(ExpenseEntity newExpense) {
+  public void saveExpense(ExpenseRequestDTO expenseRequestDTO) {
+    ExpenseEntity newExpense = new ExpenseEntity(expenseRequestDTO);
     expenseRepository.save(newExpense);
   }
 
-  public List<ExpenseEntity> findAllExpenses() {
-    return expenseRepository.findAll();
+  public List<ExpenseResponseDTO> findAllExpenses() {
+    return expenseRepository.findAll().stream().map(ExpenseResponseDTO::new).toList();
   }
 
-  public ExpenseEntity findExpenseById(UUID expenseId) {
-    return expenseRepository.findByExpenseId(expenseId).get();
+  public ExpenseResponseDTO findExpenseById(String expenseId) {
+    return new ExpenseResponseDTO(expenseRepository.findByExpenseId(expenseId).get());
   }
 
   @Transactional
-  public void deleteExpenseById(UUID expenseId) {
+  public void deleteExpenseById(String expenseId) {
+    ExpenseEntity expense = expenseRepository.findByExpenseId(expenseId).get();
     expenseRepository.deleteByExpenseId(expenseId);
   }
 }

@@ -1,7 +1,6 @@
 package com.MyApp.budgetControl.domain.expense;
 
 import java.time.Instant;
-import java.util.UUID;
 import lombok.Value;
 
 @Value
@@ -15,7 +14,7 @@ public class ExpenseResponseDTO {
     this.expenseDate = expense.getExpenseDate();
   }
 
-  private final UUID expenseId;
+  private final String expenseId;
   private final double expenseCost;
   private final String expenseCategory;
   private final String expenseComment;

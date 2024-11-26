@@ -27,47 +27,39 @@ class ExpensesServiceTest {
   @InjectMocks
   ExpensesService subject;
   static Instant date = new Date().toInstant();
-  static UUID rndUUID1 =  UUID.randomUUID();
-  static UUID rndUUID2 =  UUID.randomUUID();
+  static String rndUUID1 =  UUID.randomUUID().toString();
+  static String rndUUID2 =  UUID.randomUUID().toString();
   static List<ExpenseEntity> expenses;
+  static ExpenseEntity expected1 = new ExpenseEntity(rndUUID1, 49.99,
+      "groceries", "Biedronka market", date);
+  static ExpenseEntity expected2 = new ExpenseEntity(rndUUID2, 10.00,
+      "eating out ", "chinese food", date);
 
   @BeforeAll
   static void setup() {
-    expenses = Arrays.asList(
-              new ExpenseEntity(rndUUID1, 49.99, "groceries", "Biedronka market", date),
-              new ExpenseEntity(rndUUID2, 10.00, "eating out ", "chinese food", date));
+    expenses = Arrays.asList(expected1, expected2);
   }
 
   @Test
   void getExpensesShouldReturnAtLeastOneExpanse() {
     when(mockRepository.findAll()).thenReturn(expenses);
-    List<ExpenseEntity> expanses = subject.findAllExpenses();
-    ExpenseEntity expected = new ExpenseEntity(
-              rndUUID1,
-              49.99,
-              "groceries",
-              "Biedronka market",
-              date);
-    assertTrue(expanses.contains(expected));
+    List<ExpenseResponseDTO> expanses = subject.findAllExpenses();
+    ExpenseResponseDTO expectedDTO = new ExpenseResponseDTO(expected1);
+    assertTrue(expanses.contains(expectedDTO));
   }
 
   @Test
   void getExpenseByIdForExistingIdIsReturningCorrectExpense() {
     when(mockRepository.findByExpenseId(rndUUID2)).thenReturn(Optional.of(
         new ExpenseEntity(rndUUID2, 10.00, "eating out ", "chinese food", date)));
-    ExpenseEntity result = subject.findExpenseById(rndUUID2);
-    ExpenseEntity expected = new ExpenseEntity(
-              rndUUID2,
-              10.00,
-              "eating out ",
-              "chinese food",
-              date);
-    assertEquals(expected, result);
+    ExpenseResponseDTO result = subject.findExpenseById(rndUUID2);
+    ExpenseResponseDTO expectedDTO = new ExpenseResponseDTO(expected2);
+    assertEquals(expectedDTO, result);
   }
 
   @Test
   void getExpenseByIdFoNotExistingIdShouldThrowException() {
-    UUID randomUUID = UUID.randomUUID();
+    String randomUUID = UUID.randomUUID().toString();
     NoSuchElementException exception =
         assertThrows(NoSuchElementException.class, () -> subject.findExpenseById(randomUUID));
     assertEquals("No value present", exception.getMessage());

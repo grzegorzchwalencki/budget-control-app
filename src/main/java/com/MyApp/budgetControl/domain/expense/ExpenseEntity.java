@@ -22,10 +22,10 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Table(name = "expenses")
 @NoArgsConstructor(force = true)
 @EntityListeners(AuditingEntityListener.class)
-public class ExpenseEntity {
+class ExpenseEntity {
 
-  public ExpenseEntity(ExpenseRequestDTO expenseRequestDTO) {
-    this.expenseId = UUID.randomUUID();
+  ExpenseEntity(ExpenseRequestDTO expenseRequestDTO) {
+    this.expenseId = UUID.randomUUID().toString();
     this.expenseCost = expenseRequestDTO.getExpenseCost();
     this.expenseCategory = expenseRequestDTO.getExpenseCategory();
     this.expenseComment = expenseRequestDTO.getExpenseComment();
@@ -33,7 +33,7 @@ public class ExpenseEntity {
   }
 
   @Id
-  private final UUID expenseId;
+  private final String expenseId;
 
   @NotNull(message = "Cost value is mandatory")
   @DecimalMin(value = "0.01", message = "Cost value should be positive")
