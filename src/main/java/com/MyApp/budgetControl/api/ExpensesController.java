@@ -51,5 +51,4 @@ public class ExpensesController {
       expensesService.deleteExpenseById(expenseId);
     }
   }
-
 }

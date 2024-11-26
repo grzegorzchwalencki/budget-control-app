@@ -133,5 +133,4 @@ class ExpensesControllerTest {
         .andExpect(status().isNotFound())
         .andExpect(jsonPath("$.errorDetails").value("Expense with given Id does not exist"));
   }
-
 }
