@@ -1,6 +1,7 @@
 package com.MyApp.budgetControl.api;
 
 import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -9,8 +10,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.MyApp.budgetControl.domain.expense.ExpenseEntity;
+import com.MyApp.budgetControl.domain.expense.ExpenseRequestDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.UUID;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -22,6 +24,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.jdbc.Sql;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.bind.annotation.RequestBody;
+
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -41,7 +44,8 @@ class ExpensesControllerTest {
            .andExpect(status().isOk())
            .andExpect(content().contentType("application/json"))
            .andExpect(jsonPath("$[*].expenseCategory")
-           .value(containsInAnyOrder("test category 1", "test category 2", "test category 3", "test category 4")));
+           .value(containsInAnyOrder("test category 1", "test category 2",
+               "test category 3", "test category 4")));
   }
 
   @Test
@@ -55,7 +59,8 @@ class ExpensesControllerTest {
            "{\"statusCode\":500,"
                + "\"errorDetails\":[\"Unknown error occured\","
                + "\"org.springframework.web.servlet.resource.NoResourceFoundException\","
-               + "\"No static resource expensesnotvalidendpoint.\"],\"errorType\":\"UNHANDLED_ERROR\"}"));
+               + "\"No static resource expensesnotvalidendpoint.\"],"
+               + "\"errorType\":\"UNHANDLED_ERROR\"}"));
   }
 
   @Test
@@ -65,7 +70,8 @@ class ExpensesControllerTest {
            .andDo(print())
            .andExpect(status().isOk())
            .andExpect(content().contentType("application/json"))
-           .andExpect(content().json("{\"expenseCost\":999.0,\"expenseCategory\":\"test category 2\",\"expenseComment\":\"test comment 2\"}"));
+           .andExpect(content().json("{\"expenseCost\":999.0,"
+               + "\"expenseCategory\":\"test category 2\",\"expenseComment\":\"test comment 2\"}"));
   }
 
   @Test
@@ -83,12 +89,15 @@ class ExpensesControllerTest {
   @Test
   @SneakyThrows
   void postNewExpenseWithAllFieldsCorrectShouldAddToRepositoryAndReturnStatusCreated() {
+    String random_expenseComment = UUID.randomUUID().toString();
     mockMvc.perform(post("/expenses")
                .contentType(MediaType.APPLICATION_JSON)
-               .content("{\"expenseCost\":99.0,\"expenseCategory\":\"test category\",\"expenseComment\":\"test comment\"}"))
-           .andDo(print())
-           .andExpect(status().isCreated())
-           .andExpect(content().json("{\"expenseCost\":99.00,\"expenseCategory\":\"test category\",\"expenseComment\":\"test comment\"}"));
+               .content("{\"expenseCost\":99.0,\"expenseCategory\":\"test category\","
+                   + "\"expenseComment\":\"" + random_expenseComment + "\"}"))
+           .andExpect(status().isCreated());
+    mockMvc.perform(get("/expenses"))
+        .andExpect(jsonPath("$[*].expenseComment", hasItem(random_expenseComment)));
+
   }
 
   @SneakyThrows
@@ -96,12 +105,11 @@ class ExpensesControllerTest {
   @CsvFileSource(resources = "/postTestData.csv", numLinesToSkip = 1)
   void postNewExpenseWithInvalidFieldsShouldReturnErrorResponseHandlingMethodArgumentNotValidException(
       @RequestBody int expenseCost, String expenseCategory, String expenseComment, String expectedMessage) {
-    ExpenseEntity newExpense = new ExpenseEntity(
-              null,
+    ExpenseRequestDTO newExpense = new ExpenseRequestDTO(
               expenseCost,
               expenseCategory,
-              expenseComment,
-              null);
+              expenseComment
+    );
     mockMvc.perform(post("/expenses")
               .contentType(MediaType.APPLICATION_JSON)
               .content(objectMapper.writeValueAsString(newExpense)))
@@ -121,7 +129,8 @@ class ExpensesControllerTest {
             .contentType(MediaType.APPLICATION_JSON))
         .andDo(print())
         .andExpect(status().isNotFound())
-        .andExpect(jsonPath("$.errorDetails").value("Expense with given Id does not exist"));
+        .andExpect(jsonPath("$.errorDetails")
+            .value("Expense with given Id does not exist"));
   }
 
   @Test

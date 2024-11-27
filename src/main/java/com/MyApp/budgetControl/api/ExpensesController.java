@@ -1,12 +1,10 @@
 package com.MyApp.budgetControl.api;
 
-import com.MyApp.budgetControl.domain.expense.ExpenseEntity;
 import com.MyApp.budgetControl.domain.expense.ExpenseRequestDTO;
 import com.MyApp.budgetControl.domain.expense.ExpenseResponseDTO;
 import com.MyApp.budgetControl.domain.expense.ExpensesService;
 import jakarta.validation.Valid;
 import java.util.List;
-import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -27,28 +25,23 @@ public class ExpensesController {
 
   @GetMapping
   public List<ExpenseResponseDTO> getExpenses() {
-    return expensesService.findAllExpenses().stream().map(ExpenseResponseDTO::new).toList();
+    return expensesService.findAllExpenses();
   }
 
   @GetMapping("/{expenseId}")
-  public ExpenseResponseDTO getExpenseById(@PathVariable UUID expenseId) {
-    return new ExpenseResponseDTO(expensesService.findExpenseById(expenseId));
+  public ExpenseResponseDTO getExpenseById(@PathVariable String expenseId) {
+    return expensesService.findExpenseById(expenseId);
   }
 
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
-  public ExpenseEntity addNewExpense(@Valid @RequestBody ExpenseRequestDTO newExpense) {
-    ExpenseEntity expense = new ExpenseEntity(newExpense);
-    expensesService.saveExpense(expense);
-    return expense;
+  public void addNewExpense(@Valid @RequestBody ExpenseRequestDTO newExpense) {
+    expensesService.saveExpense(newExpense);
   }
 
   @DeleteMapping("/{expenseId}")
   @ResponseStatus(HttpStatus.ACCEPTED)
-  public void deleteExpense(@PathVariable UUID expenseId) {
-    ExpenseEntity expense = expensesService.findExpenseById(expenseId);
-    if (expense != null) {
+  public void deleteExpense(@PathVariable String expenseId) {
       expensesService.deleteExpenseById(expenseId);
-    }
   }
 }
