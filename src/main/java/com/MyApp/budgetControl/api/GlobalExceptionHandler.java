@@ -4,6 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.NoSuchElementException;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -39,7 +40,14 @@ class GlobalExceptionHandler {
   @ResponseStatus(HttpStatus.NOT_FOUND)
   @ExceptionHandler(value = NoSuchElementException.class)
   public @ResponseBody ErrorResponse handleNoSuchElementExceptions(NoSuchElementException ex) {
-    List<String> errorMessage = List.of("Expense with given Id does not exist");
+    List<String> errorMessage = List.of("Element with given Id does not exist");
     return  ErrorResponse.forNotFoundError(errorMessage);
+  }
+
+  @ResponseStatus(HttpStatus.CONFLICT)
+  @ExceptionHandler(value = DataIntegrityViolationException.class)
+  public @ResponseBody ErrorResponse handleDataIntegrityViolationException(DataIntegrityViolationException ex) {
+    List<String> errorMessage = List.of("Name is already used. Please choose a different one.");
+    return ErrorResponse.forConflictError(errorMessage);
   }
 }
