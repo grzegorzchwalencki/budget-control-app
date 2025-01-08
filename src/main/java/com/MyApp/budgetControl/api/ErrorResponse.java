@@ -25,10 +25,15 @@ class ErrorResponse {
     return  new ErrorResponse(HttpStatus.NOT_FOUND.value(), errorDetails, ErrorType.NOT_FOUND_ERROR);
   }
 
+  public static ErrorResponse forConflictError(List<String> errorDetails) {
+    return new ErrorResponse(HttpStatus.CONFLICT.value(), errorDetails, ErrorType.CONFLICT_ERROR);
+  }
+
   enum ErrorType {
         VALIDATION_ERROR,
         NOT_FOUND_ERROR,
         UNHANDLED_ERROR,
+        CONFLICT_ERROR
   }
 }
 
