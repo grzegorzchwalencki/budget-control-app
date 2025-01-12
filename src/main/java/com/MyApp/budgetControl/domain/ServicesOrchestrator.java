@@ -1,9 +1,9 @@
 package com.MyApp.budgetControl.domain;
 
+import com.MyApp.budgetControl.domain.category.CategoryEntity;
 import com.MyApp.budgetControl.domain.category.CategoryRequestDTO;
 import com.MyApp.budgetControl.domain.category.CategoryResponseDTO;
 import com.MyApp.budgetControl.domain.category.CategoryService;
-import com.MyApp.budgetControl.domain.category.CategoryEntity;
 import com.MyApp.budgetControl.domain.expense.ExpenseEntity;
 import com.MyApp.budgetControl.domain.expense.ExpenseRequestDTO;
 import com.MyApp.budgetControl.domain.expense.ExpenseResponseDTO;
@@ -12,9 +12,11 @@ import com.MyApp.budgetControl.domain.user.UserEntity;
 import com.MyApp.budgetControl.domain.user.UserRequestDTO;
 import com.MyApp.budgetControl.domain.user.UserResponseDTO;
 import com.MyApp.budgetControl.domain.user.UserService;
-import java.util.List;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -36,11 +38,15 @@ public class ServicesOrchestrator {
   public CategoryResponseDTO findByCategoryId(String categoryId) {
     return new CategoryResponseDTO(categoryService.findCategoryById(categoryId));
   }
+
   // EXPENSE
+  @Transactional
   public void saveExpense(ExpenseRequestDTO expenseRequestDTO) {
     CategoryEntity category = categoryService.findCategoryById(expenseRequestDTO.getExpenseCategory());
     UserEntity user = userService.findUserById(expenseRequestDTO.getUserId());
-    ExpenseEntity newExpense = expensesService.saveExpense(expenseRequestDTO,category, user);
+    ExpenseEntity newExpense = expensesService.saveExpense(expenseRequestDTO, category, user);
+    user.getUserExpenses().add(newExpense);
+    category.getCategoryExpenses().add(newExpense);
   }
 
   public List<ExpenseResponseDTO> findAllExpenses() {

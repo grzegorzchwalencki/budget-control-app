@@ -11,7 +11,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import java.util.Collections;
-import java.util.Set;
+import java.util.List;
 import java.util.UUID;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
@@ -32,7 +32,7 @@ public class UserEntity {
     this.userId = UUID.randomUUID().toString();
     this.userName = userRequestDTO.getUserName();
     this.userEmail = userRequestDTO.getUserEmail();
-    this.userExpenses = Collections.emptySet();
+    this.userExpenses = Collections.emptyList();
   }
 
   @Id
@@ -50,6 +50,6 @@ public class UserEntity {
 
   @OneToMany(mappedBy="user")
   @JdbcTypeCode(SqlTypes.JSON)
-  private Set<ExpenseEntity> userExpenses;
+  private List<ExpenseEntity> userExpenses;
 
 }

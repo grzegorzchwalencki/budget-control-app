@@ -5,22 +5,18 @@ import com.MyApp.budgetControl.domain.user.UserEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import java.time.Instant;
+import java.util.UUID;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
-
-import java.time.Instant;
-import java.util.UUID;
 
 
 @Value
@@ -49,8 +45,6 @@ public class ExpenseEntity {
 
   @NotNull(message = "Category is mandatory")
   @ManyToOne
-  @JoinColumn(name = "categoryId")
-  @JdbcTypeCode(SqlTypes.JSON)
   private final CategoryEntity expenseCategory;
 
   @NotBlank(message = "Comment is mandatory")
@@ -62,7 +56,6 @@ public class ExpenseEntity {
 
   @NotNull(message = "User id is mandatory")
   @ManyToOne
-  @JoinColumn(name = "userId")
   private final UserEntity user;
 
 }

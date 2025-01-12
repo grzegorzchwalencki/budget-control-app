@@ -3,7 +3,6 @@ package com.MyApp.budgetControl.api;
 import com.MyApp.budgetControl.domain.ServicesOrchestrator;
 import com.MyApp.budgetControl.domain.expense.ExpenseRequestDTO;
 import com.MyApp.budgetControl.domain.expense.ExpenseResponseDTO;
-import com.MyApp.budgetControl.domain.expense.ExpensesService;
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -22,7 +21,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/expenses")
 public class ExpensesController {
 
-//  private final ExpensesService expensesService;
   private final ServicesOrchestrator servicesOrchestrator;
 
   @GetMapping

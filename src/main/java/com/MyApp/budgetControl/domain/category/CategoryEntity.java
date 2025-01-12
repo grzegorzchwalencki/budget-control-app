@@ -9,13 +9,14 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import java.util.Collections;
-import java.util.Set;
+import java.util.List;
 import java.util.UUID;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
+
 
 @Value
 @Entity
@@ -27,7 +28,7 @@ public class CategoryEntity {
   CategoryEntity(CategoryRequestDTO categoryRequestDTO) {
     this.categoryId = UUID.randomUUID().toString();
     this.categoryName = categoryRequestDTO.getCategoryName();
-    this.categoryExpenses = Collections.emptySet();
+    this.categoryExpenses = Collections.emptyList();
   }
 
   @Id
@@ -40,7 +41,7 @@ public class CategoryEntity {
 
   @OneToMany(mappedBy = "expenseCategory")
   @JdbcTypeCode(SqlTypes.JSON)
-  private Set<ExpenseEntity> categoryExpenses;
+  private List<ExpenseEntity> categoryExpenses;
 
 
 }
