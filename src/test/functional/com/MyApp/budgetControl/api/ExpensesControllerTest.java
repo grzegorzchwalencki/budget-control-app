@@ -104,11 +104,12 @@ class ExpensesControllerTest {
   @ParameterizedTest
   @CsvFileSource(resources = "/postTestData.csv", numLinesToSkip = 1)
   void postNewExpenseWithInvalidFieldsShouldReturnErrorResponseHandlingMethodArgumentNotValidException(
-      @RequestBody int expenseCost, String expenseCategory, String expenseComment, String expectedMessage) {
+      @RequestBody int expenseCost, String expenseCategory, String expenseComment, String expectedMessage, String userId) {
     ExpenseRequestDTO newExpense = new ExpenseRequestDTO(
               expenseCost,
               expenseCategory,
-              expenseComment
+              expenseComment,
+              userId
     );
     mockMvc.perform(post("/expenses")
               .contentType(MediaType.APPLICATION_JSON)

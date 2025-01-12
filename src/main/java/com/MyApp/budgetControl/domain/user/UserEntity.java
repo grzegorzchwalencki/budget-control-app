@@ -1,17 +1,23 @@
 package com.MyApp.budgetControl.domain.user;
 
+import com.MyApp.budgetControl.domain.expense.ExpenseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+import java.util.Collections;
+import java.util.Set;
 import java.util.UUID;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Value
@@ -20,12 +26,13 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @Table(name = "app_user")
 @NoArgsConstructor(force = true)
 @EntityListeners(AuditingEntityListener.class)
-class UserEntity {
+public class UserEntity {
 
   UserEntity(UserRequestDTO userRequestDTO) {
     this.userId = UUID.randomUUID().toString();
     this.userName = userRequestDTO.getUserName();
     this.userEmail = userRequestDTO.getUserEmail();
+    this.userExpenses = Collections.emptySet();
   }
 
   @Id
@@ -40,5 +47,9 @@ class UserEntity {
   @NotBlank(message = "Email address is mandatory")
   @Size(max = 64, message = "Email address max length is 64 char")
   private final String userEmail;
+
+  @OneToMany(mappedBy="user")
+  @JdbcTypeCode(SqlTypes.JSON)
+  private Set<ExpenseEntity> userExpenses;
 
 }

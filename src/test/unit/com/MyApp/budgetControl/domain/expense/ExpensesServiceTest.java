@@ -8,10 +8,14 @@ import static org.mockito.Mockito.when;
 import java.time.Instant;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.UUID;
+
+import com.MyApp.budgetControl.domain.category.CategoryEntity;
+import com.MyApp.budgetControl.domain.user.UserEntity;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -29,11 +33,14 @@ class ExpensesServiceTest {
   static Instant date = new Date().toInstant();
   static String rndUUID1 =  UUID.randomUUID().toString();
   static String rndUUID2 =  UUID.randomUUID().toString();
+  static String rndUUID3 =  UUID.randomUUID().toString();
   static List<ExpenseEntity> expenses;
+  static UserEntity user = new UserEntity(rndUUID3, "testUserName", "testUser@email.com", new HashSet<>());
+  static CategoryEntity category = new CategoryEntity(rndUUID3, "testCategory", new HashSet<>());
   static ExpenseEntity expected1 = new ExpenseEntity(rndUUID1, 49.99,
-      "groceries", "Biedronka market", date);
+      category, "Biedronka market", date, user);
   static ExpenseEntity expected2 = new ExpenseEntity(rndUUID2, 10.00,
-      "eating out ", "chinese food", date);
+      category, "chinese food", date, user);
 
   @BeforeAll
   static void setup() {
@@ -50,8 +57,8 @@ class ExpensesServiceTest {
 
   @Test
   void getExpenseByIdForExistingIdIsReturningCorrectExpense() {
-    when(mockRepository.findByExpenseId(rndUUID2)).thenReturn(Optional.of(
-        new ExpenseEntity(rndUUID2, 10.00, "eating out ", "chinese food", date)));
+    when(mockRepository.findById(rndUUID2)).thenReturn(Optional.of(
+        new ExpenseEntity(rndUUID2, 10.00, category, "chinese food", date, user)));
     ExpenseResponseDTO result = subject.findExpenseById(rndUUID2);
     ExpenseResponseDTO expectedDTO = new ExpenseResponseDTO(expected2);
     assertEquals(expectedDTO, result);

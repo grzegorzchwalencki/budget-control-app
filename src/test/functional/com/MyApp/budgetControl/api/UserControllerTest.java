@@ -14,7 +14,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
 import java.util.UUID;
 import lombok.SneakyThrows;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -23,6 +26,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class UserControllerTest {
 
   @Autowired
@@ -30,7 +34,9 @@ class UserControllerTest {
   @Autowired
   private ObjectMapper objectMapper;
 
+
   @Test
+  @Order(1)
   @SneakyThrows
   void getUserMethodShouldReturnAllExistingRecordsCode200andAppJsonContentType() {
     mockMvc.perform(post("/users")

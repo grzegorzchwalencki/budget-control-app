@@ -1,9 +1,10 @@
 package com.MyApp.budgetControl.domain.user;
 
 import jakarta.transaction.Transactional;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 
 @Service
@@ -21,14 +22,14 @@ public class UserService {
     return userRepository.findAll().stream().map(UserResponseDTO::new).toList();
   }
 
-  public UserResponseDTO findUserById(String userId) {
-    return new UserResponseDTO(userRepository.findByUserId(userId).get());
+  public UserEntity findUserById(String userId) {
+    return userRepository.findById(userId).get();
   }
 
   @Transactional
   public void deleteUserById(String userId) {
-    UserEntity user = userRepository.findByUserId(userId).get();
-    userRepository.deleteByUserId(userId);
+    UserEntity user = userRepository.findById(userId).get();
+    userRepository.deleteById(userId);
   }
 
 }

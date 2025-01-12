@@ -1,5 +1,6 @@
 package com.MyApp.budgetControl.api;
 
+import com.MyApp.budgetControl.domain.ServicesOrchestrator;
 import com.MyApp.budgetControl.domain.user.UserRequestDTO;
 import com.MyApp.budgetControl.domain.user.UserResponseDTO;
 import com.MyApp.budgetControl.domain.user.UserService;
@@ -21,27 +22,27 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/users")
 public class UserController {
 
-  private final UserService userService;
+  private final ServicesOrchestrator servicesOrchestrator;
 
   @GetMapping
   public List<UserResponseDTO> getUsers() {
-    return userService.findAllUsers();
+    return servicesOrchestrator.findAllUsers();
   }
 
   @GetMapping("/{userId}")
   public UserResponseDTO getUserById(@PathVariable String userId) {
-    return userService.findUserById(userId);
+    return servicesOrchestrator.findUserById(userId);
   }
 
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
   public void addNewUser(@Valid @RequestBody UserRequestDTO newUser) {
-    userService.saveUser(newUser);
+    servicesOrchestrator.saveUser(newUser);
   }
 
   @DeleteMapping("/{userId}")
   @ResponseStatus(HttpStatus.ACCEPTED)
   public void deleteUser(@PathVariable String userId) {
-      userService.deleteUserById(userId);
+    servicesOrchestrator.deleteUserById(userId);
   }
 }

@@ -1,5 +1,6 @@
 package com.MyApp.budgetControl.api;
 
+import com.MyApp.budgetControl.domain.ServicesOrchestrator;
 import com.MyApp.budgetControl.domain.expense.ExpenseRequestDTO;
 import com.MyApp.budgetControl.domain.expense.ExpenseResponseDTO;
 import com.MyApp.budgetControl.domain.expense.ExpensesService;
@@ -21,27 +22,28 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/expenses")
 public class ExpensesController {
 
-  private final ExpensesService expensesService;
+//  private final ExpensesService expensesService;
+  private final ServicesOrchestrator servicesOrchestrator;
 
   @GetMapping
   public List<ExpenseResponseDTO> getExpenses() {
-    return expensesService.findAllExpenses();
+    return servicesOrchestrator.findAllExpenses();
   }
 
   @GetMapping("/{expenseId}")
   public ExpenseResponseDTO getExpenseById(@PathVariable String expenseId) {
-    return expensesService.findExpenseById(expenseId);
+    return servicesOrchestrator.findExpenseById(expenseId);
   }
 
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
   public void addNewExpense(@Valid @RequestBody ExpenseRequestDTO newExpense) {
-    expensesService.saveExpense(newExpense);
+    servicesOrchestrator.saveExpense(newExpense);
   }
 
   @DeleteMapping("/{expenseId}")
   @ResponseStatus(HttpStatus.ACCEPTED)
   public void deleteExpense(@PathVariable String expenseId) {
-      expensesService.deleteExpenseById(expenseId);
+    servicesOrchestrator.deleteExpenseById(expenseId);
   }
 }
