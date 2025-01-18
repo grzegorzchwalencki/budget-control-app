@@ -6,6 +6,7 @@ import static org.mockito.Mockito.when;
 import java.util.Arrays;
 import java.util.List;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -31,10 +32,12 @@ public class CategoryServiceTest {
   }
 
   @Test
-  void getCategoriesShouldReturnAtLeastOneCategory() {
+  void getCategoriesShouldReturnAllCategories() {
     when(mockRepository.findAll()).thenReturn(categories);
     List<CategoryResponseDTO> categories = subject.findAllCategories();
     String expectedCategoryName = "health";
     assertTrue(categories.stream().anyMatch(x -> x.getCategoryName().equals(expectedCategoryName)));
+    int expectedCategoriesAmount = 2;
+    Assertions.assertEquals(expectedCategoriesAmount, categories.size());
   }
 }

@@ -1,5 +1,6 @@
 package com.MyApp.budgetControl.domain.category;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
@@ -28,6 +29,7 @@ CategoryEntity(CategoryRequestDTO categoryRequestDTO) {
 
   @NotBlank(message = "Category name is mandatory")
   @Size(max = 64, message = "Category name max length is 64 char")
+  @Column(unique = true)
   private final String categoryName;
 
 }
