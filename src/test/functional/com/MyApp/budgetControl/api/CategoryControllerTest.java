@@ -1,13 +1,5 @@
 package com.MyApp.budgetControl.api;
 
-import static org.hamcrest.Matchers.containsInAnyOrder;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
@@ -18,6 +10,15 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+
+import static org.hamcrest.Matchers.containsInAnyOrder;
+import static org.hamcrest.Matchers.hasItem;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -50,11 +51,11 @@ public class CategoryControllerTest {
   void postNewCategoryShouldAddToRepositoryAndReturnStatusCreated() {
     mockMvc.perform(post("/categories")
             .contentType(MediaType.APPLICATION_JSON)
-            .content("{\"categoryName\":\"shopping\"}"))
+            .content("{\"categoryName\":\"test-category-shopping\"}"))
         .andDo(print())
         .andExpect(status().isCreated());
     mockMvc.perform(get("/categories"))
-        .andExpect(jsonPath("$[*].categoryName").value("shopping"));
+        .andExpect(jsonPath("$[*].categoryName", hasItem("test-category-shopping")));
   }
 
   @Test

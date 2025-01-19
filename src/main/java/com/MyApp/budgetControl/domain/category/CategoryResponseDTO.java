@@ -6,11 +6,11 @@ import lombok.Value;
 public class CategoryResponseDTO {
 
   public CategoryResponseDTO(CategoryEntity categoryEntity) {
-    this.id = categoryEntity.getId();
+    this.categoryId = categoryEntity.getCategoryId();
     this.categoryName = categoryEntity.getCategoryName();
   }
 
-  private final String id;
+  private final String categoryId;
   private final String categoryName;
 
 }
