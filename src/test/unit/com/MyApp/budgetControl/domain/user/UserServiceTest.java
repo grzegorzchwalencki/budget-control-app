@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.NoSuchElementException;
@@ -16,7 +17,6 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-
 
 @ExtendWith(MockitoExtension.class)
 public class UserServiceTest {
@@ -51,9 +51,9 @@ public class UserServiceTest {
     when(mockRepository.findAll()).thenReturn(users);
     List<UserResponseDTO> users = subject.findAllUsers();
     String userId = users.get(0).getUserId();
-    when(mockRepository.findByUserId(userId)).thenReturn(Optional.of(
-        new UserEntity(userId, "testUsername1", "testEmail1@test.com")));
-    UserResponseDTO result = subject.findUserById(userId);
+    when(mockRepository.findById(userId)).thenReturn(Optional.of(
+        new UserEntity(userId, "testUsername1", "testEmail1@test.com", new ArrayList<>())));
+    UserEntity result = subject.findUserById(userId);
     String expectedUserName = "testUsername1";
     assertEquals(result.getUserName(), expectedUserName);
   }
