@@ -1,11 +1,5 @@
 package com.MyApp.budgetControl.domain.category;
 
-import static org.junit.jupiter.api.Assertions.assertTrue;
-import static org.mockito.Mockito.when;
-
-import java.util.Arrays;
-import java.util.List;
-
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -13,6 +7,12 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.mockito.Mockito.when;
+
+import java.util.Arrays;
+import java.util.List;
 
 @ExtendWith(MockitoExtension.class)
 public class CategoryServiceTest {
@@ -27,7 +27,7 @@ public class CategoryServiceTest {
   @BeforeAll
   static void setup() {
     categories = Arrays.asList(
-        new CategoryEntity( new CategoryRequestDTO("groceries")),
+        new CategoryEntity(new CategoryRequestDTO("groceries")),
         new CategoryEntity(new CategoryRequestDTO("health")));
   }
 

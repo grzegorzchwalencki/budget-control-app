@@ -4,15 +4,13 @@ import com.MyApp.budgetControl.domain.category.CategoryEntity;
 import com.MyApp.budgetControl.domain.category.CategoryRequestDTO;
 import com.MyApp.budgetControl.domain.category.CategoryResponseDTO;
 import com.MyApp.budgetControl.domain.category.CategoryService;
-import com.MyApp.budgetControl.domain.expense.ExpenseEntity;
 import com.MyApp.budgetControl.domain.expense.ExpenseRequestDTO;
 import com.MyApp.budgetControl.domain.expense.ExpenseResponseDTO;
-import com.MyApp.budgetControl.domain.expense.ExpensesService;
+import com.MyApp.budgetControl.domain.expense.ExpenseService;
 import com.MyApp.budgetControl.domain.user.UserEntity;
 import com.MyApp.budgetControl.domain.user.UserRequestDTO;
 import com.MyApp.budgetControl.domain.user.UserResponseDTO;
 import com.MyApp.budgetControl.domain.user.UserService;
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -23,7 +21,7 @@ import java.util.List;
 public class ServicesOrchestrator {
 
   private final CategoryService categoryService;
-  private final ExpensesService expensesService;
+  private final ExpenseService expenseService;
   private final UserService userService;
 
   // CATEGORY
@@ -40,25 +38,23 @@ public class ServicesOrchestrator {
   }
 
   // EXPENSE
-  @Transactional
+
   public void saveExpense(ExpenseRequestDTO expenseRequestDTO) {
     CategoryEntity category = categoryService.findCategoryById(expenseRequestDTO.getExpenseCategory());
     UserEntity user = userService.findUserById(expenseRequestDTO.getUserId());
-    ExpenseEntity newExpense = expensesService.saveExpense(expenseRequestDTO, category, user);
-    user.getUserExpenses().add(newExpense);
-    category.getCategoryExpenses().add(newExpense);
+    expenseService.saveExpense(expenseRequestDTO, category, user);
   }
 
   public List<ExpenseResponseDTO> findAllExpenses() {
-    return expensesService.findAllExpenses();
+    return expenseService.findAllExpenses();
   }
 
   public ExpenseResponseDTO findExpenseById(String expenseId) {
-    return expensesService.findExpenseById(expenseId);
+    return expenseService.findExpenseById(expenseId);
   }
 
   public void deleteExpenseById(String expenseId) {
-    expensesService.deleteExpenseById(expenseId);
+    expenseService.deleteExpenseById(expenseId);
   }
 
   // USER

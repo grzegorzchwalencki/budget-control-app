@@ -3,7 +3,7 @@ package com.MyApp.budgetControl.domain.expense;
 import java.util.List;
 import java.util.Optional;
 
-public interface ExpenseRepository {
+interface ExpenseRepository {
 
   ExpenseEntity save(ExpenseEntity newExpense);
 
