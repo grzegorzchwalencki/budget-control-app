@@ -1,9 +1,5 @@
 package com.MyApp.budgetControl.api;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
-
-import java.util.NoSuchElementException;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
 import org.springframework.core.MethodParameter;
@@ -13,7 +9,16 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+import java.util.NoSuchElementException;
+
 public class GlobalExceptionHandlerTest {
+
+  public static String notFoundMessage = "Element with given Id does not exist";
+  public static String unknownErrorMessage = "Unknown error occured";
+
   @Test
   @SneakyThrows
   void handleMethodArgumentNotValidException() {
@@ -40,7 +45,7 @@ public class GlobalExceptionHandlerTest {
       GlobalExceptionHandler handler = new GlobalExceptionHandler();
       ErrorResponse response = handler.handleUnexpectedErrors(ex);
       assertEquals(HttpStatus.INTERNAL_SERVER_ERROR.value(), response.getStatusCode());
-      assertTrue(response.getErrorDetails().contains("Unknown error occured"));
+      assertTrue(response.getErrorDetails().contains(unknownErrorMessage));
       assertEquals(ErrorResponse.ErrorType.UNHANDLED_ERROR, response.getErrorType());
     }
   }
@@ -53,7 +58,7 @@ public class GlobalExceptionHandlerTest {
       GlobalExceptionHandler handler = new GlobalExceptionHandler();
       ErrorResponse response = handler.handleNoSuchElementExceptions(ex);
       assertEquals(HttpStatus.NOT_FOUND.value(), response.getStatusCode());
-      assertTrue(response.getErrorDetails().contains("Expense with given Id does not exist"));
+      assertTrue(response.getErrorDetails().contains(notFoundMessage));
       assertEquals(ErrorResponse.ErrorType.NOT_FOUND_ERROR, response.getErrorType());
     }
   }

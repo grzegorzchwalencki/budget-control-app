@@ -1,8 +1,8 @@
-package com.MyApp.budgetControl.api;
+package com.MyApp.budgetControl.api.controller;
 
 import com.MyApp.budgetControl.domain.ServicesOrchestrator;
-import com.MyApp.budgetControl.domain.user.UserRequestDTO;
-import com.MyApp.budgetControl.domain.user.UserResponseDTO;
+import com.MyApp.budgetControl.domain.expense.dto.ExpenseRequestDTO;
+import com.MyApp.budgetControl.domain.expense.dto.ExpenseResponseDTO;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -19,31 +19,30 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/users")
-public class UserController {
+@RequestMapping("/expenses")
+public class ExpensesController {
 
   private final ServicesOrchestrator servicesOrchestrator;
 
   @GetMapping
-  public List<UserResponseDTO> getUsers() {
-    return servicesOrchestrator.findAllUsers();
+  public List<ExpenseResponseDTO> getExpenses() {
+    return servicesOrchestrator.findAllExpenses();
   }
 
-  @GetMapping("/{userId}")
-  public UserResponseDTO getUserById(@PathVariable String userId) {
-    return servicesOrchestrator.findUserById(userId);
+  @GetMapping("/{expenseId}")
+  public ExpenseResponseDTO getExpenseById(@PathVariable String expenseId) {
+    return servicesOrchestrator.findExpenseById(expenseId);
   }
 
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
-  public void addNewUser(@Valid @RequestBody UserRequestDTO newUser) {
-    servicesOrchestrator.saveUser(newUser);
+  public void addNewExpense(@Valid @RequestBody ExpenseRequestDTO newExpense) {
+    servicesOrchestrator.saveExpense(newExpense);
   }
 
-  @DeleteMapping("/{userId}")
+  @DeleteMapping("/{expenseId}")
   @ResponseStatus(HttpStatus.ACCEPTED)
-  public void deleteUser(@PathVariable String userId) {
-    servicesOrchestrator.deleteUserById(userId);
+  public void deleteExpense(@PathVariable String expenseId) {
+    servicesOrchestrator.deleteExpenseById(expenseId);
   }
-
 }

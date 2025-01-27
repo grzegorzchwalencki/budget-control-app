@@ -1,16 +1,16 @@
 package com.MyApp.budgetControl.domain;
 
 import com.MyApp.budgetControl.domain.category.CategoryEntity;
-import com.MyApp.budgetControl.domain.category.CategoryRequestDTO;
-import com.MyApp.budgetControl.domain.category.CategoryResponseDTO;
 import com.MyApp.budgetControl.domain.category.CategoryService;
-import com.MyApp.budgetControl.domain.expense.ExpenseRequestDTO;
-import com.MyApp.budgetControl.domain.expense.ExpenseResponseDTO;
+import com.MyApp.budgetControl.domain.category.dto.CategoryRequestDTO;
+import com.MyApp.budgetControl.domain.category.dto.CategoryResponseDTO;
 import com.MyApp.budgetControl.domain.expense.ExpenseService;
+import com.MyApp.budgetControl.domain.expense.dto.ExpenseRequestDTO;
+import com.MyApp.budgetControl.domain.expense.dto.ExpenseResponseDTO;
 import com.MyApp.budgetControl.domain.user.UserEntity;
-import com.MyApp.budgetControl.domain.user.UserRequestDTO;
-import com.MyApp.budgetControl.domain.user.UserResponseDTO;
 import com.MyApp.budgetControl.domain.user.UserService;
+import com.MyApp.budgetControl.domain.user.dto.UserRequestDTO;
+import com.MyApp.budgetControl.domain.user.dto.UserResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

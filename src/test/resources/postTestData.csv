@@ -1,4 +1,4 @@
-expenseCost, expenseCategory, expenseComment, expectedMessage
--10,comment,                                    Cost value should be positive
-10,CommentLengthMoreThan128charsCommentLengthMoreThan128charsCommentLengthMoreThan128charsCommentLengthMoreThan128chars1234567890123, Comment max length is 128 char
-10,,                                            Comment is mandatory
+expenseCost, expenseComment, expectedMessage
+-10,comment,Cost value should be positive
+10,CommentLengthMoreThan128charsCommentLengthMoreThan128charsCommentLengthMoreThan128charsCommentLengthMoreThan128chars1234567890123,Comment max length is 128 char
+10,,Comment is mandatory

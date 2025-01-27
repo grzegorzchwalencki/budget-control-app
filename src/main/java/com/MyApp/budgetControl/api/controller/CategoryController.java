@@ -1,8 +1,8 @@
-package com.MyApp.budgetControl.api;
+package com.MyApp.budgetControl.api.controller;
 
 import com.MyApp.budgetControl.domain.ServicesOrchestrator;
-import com.MyApp.budgetControl.domain.category.CategoryRequestDTO;
-import com.MyApp.budgetControl.domain.category.CategoryResponseDTO;
+import com.MyApp.budgetControl.domain.category.dto.CategoryRequestDTO;
+import com.MyApp.budgetControl.domain.category.dto.CategoryResponseDTO;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+
 
 @RestController
 @RequiredArgsConstructor

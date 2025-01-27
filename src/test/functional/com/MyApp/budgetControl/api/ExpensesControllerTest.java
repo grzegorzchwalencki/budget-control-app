@@ -1,19 +1,11 @@
 package com.MyApp.budgetControl.api;
 
-import static org.hamcrest.Matchers.hasItem;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import com.MyApp.budgetControl.domain.expense.ExpenseRequestDTO;
+import com.MyApp.budgetControl.domain.expense.dto.ExpenseRequestDTO;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
-import java.util.UUID;
 import lombok.SneakyThrows;
+import net.datafaker.Faker;
+import org.assertj.core.util.Arrays;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -26,6 +18,16 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import static org.hamcrest.Matchers.hasItem;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.util.UUID;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -38,36 +40,33 @@ class ExpensesControllerTest {
   private ObjectMapper objectMapper;
 
   private static final String regex = "[\"\\[\\]]";
-  protected String userId;
-  protected String categoryId;
-  protected String initialExpenseId;
+  protected String initUserId;
+  protected String initCategoryId;
+  protected String initExpenseId;
   private static final String notFoundMsg = "Element with given Id does not exist";
+  Faker faker = new Faker();
+  String userName = faker.rickAndMorty().character();
+  String categoryName = faker.tea().type();
+  String comment = faker.friends().location();
 
   @SneakyThrows
   @BeforeAll
   public void setUp() {
     mockMvc.perform(post("/users")
         .contentType(MediaType.APPLICATION_JSON)
-        .content("{\"userName\":\"test01\",\"userEmail\":\"test@test.com\"}"));
-    String user =  mockMvc.perform(get("/users"))
-        .andReturn().getResponse().getContentAsString();
-    userId = JsonPath.read(user, "$[*].userId").toString().replaceAll(regex, "");
-
+        .content("{\"userName\":\"" + userName + "\",\"userEmail\":\"test@test.com\"}"));
+    initUserId = findIdByAttributeValue(userName, "user");
+    
     mockMvc.perform(post("/categories")
         .contentType(MediaType.APPLICATION_JSON)
-        .content("{\"categoryName\":\"testCategory\"}"));
-    String category =  mockMvc.perform(get("/categories"))
-        .andReturn().getResponse().getContentAsString();
-    categoryId = JsonPath.read(category, "$[*].categoryId").toString().replaceAll(regex, "");
-
+        .content("{\"categoryName\":\"" + categoryName + "\"}"));
+    initCategoryId = findIdByAttributeValue(categoryName, "category");
+    
     mockMvc.perform(post("/expenses")
         .contentType(MediaType.APPLICATION_JSON)
         .content(objectMapper.writeValueAsString(
-            new ExpenseRequestDTO(123, categoryId, "initial-test-comment", userId))));
-    String initialExpense =  mockMvc.perform(get("/expenses"))
-        .andReturn().getResponse().getContentAsString();
-    initialExpenseId = JsonPath.read(
-        initialExpense, "$[*].expenseId").toString().replaceAll(regex, "");
+            new ExpenseRequestDTO(123, initCategoryId, comment, initUserId))));
+    initExpenseId = findIdByAttributeValue(comment, "expense");
   }
 
   @Test
@@ -77,20 +76,20 @@ class ExpensesControllerTest {
            .andDo(print())
            .andExpect(status().isOk())
            .andExpect(content().contentType("application/json"))
-           .andExpect(jsonPath("$[*].expenseComment", hasItem("initial-test-comment")));
+           .andExpect(jsonPath("$[*].expenseComment", hasItem(comment)));
   }
 
   @Test
   @SneakyThrows
   void getExpenseByIdMethodShouldReturnCode200andAppJsonContentTypeWithCorrectJsonContent() {
-    mockMvc.perform(get("/expenses/" + initialExpenseId))
+    mockMvc.perform(get("/expenses/" + initExpenseId))
            .andDo(print())
            .andExpect(status().isOk())
            .andExpect(content().contentType("application/json"))
-           .andExpect(content().json("""
+           .andExpect(content().json(String.format("""
                {"expenseCost":123.0,
-               "expenseCategory":"testCategory",
-               "expenseComment":"initial-test-comment"}"""));
+               "expenseCategory":"%s",
+               "expenseComment":"%s"}""", categoryName, comment)));
   }
 
   @Test
@@ -109,20 +108,23 @@ class ExpensesControllerTest {
   @Test
   @SneakyThrows
   void deleteExpenseShouldRemoveItFromRepositoryAndReturnStatusAccepted() {
+    String newComment = faker.beer().style();
+
     mockMvc.perform(post("/expenses")
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(
-                new ExpenseRequestDTO(123, categoryId, "test-comment", userId))))
+                new ExpenseRequestDTO(123, initCategoryId, newComment, initUserId))))
         .andDo(print())
         .andExpect(status().isCreated());
-    String expense =  mockMvc.perform(get("/expenses"))
-        .andReturn().getResponse().getContentAsString();
-    String expenseId = JsonPath.read(expense, "$[*].expenseId").toString().replaceAll(regex, "").split(",")[1];
-    mockMvc.perform(delete("/expenses/" + expenseId)
+
+    String expenseToDeleteId = findIdByAttributeValue(newComment, "expense");
+
+    mockMvc.perform(delete("/expenses/" + expenseToDeleteId)
             .contentType(MediaType.APPLICATION_JSON))
         .andDo(print())
         .andExpect(status().isAccepted());
-    mockMvc.perform(get("/expenses/" + expenseId)
+
+    mockMvc.perform(get("/expenses/" + expenseToDeleteId)
             .contentType(MediaType.APPLICATION_JSON))
         .andDo(print())
         .andExpect(status().isNotFound())
@@ -137,7 +139,7 @@ class ExpensesControllerTest {
     mockMvc.perform(post("/expenses")
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(
-                new ExpenseRequestDTO(123, categoryId, random_expenseComment, userId))))
+                new ExpenseRequestDTO(123, initCategoryId, random_expenseComment, initUserId))))
         .andDo(print())
         .andExpect(status().isCreated());
     mockMvc.perform(get("/expenses"))
@@ -151,9 +153,9 @@ class ExpensesControllerTest {
       @RequestBody int expenseCost, String expenseComment, String expectedMessage) {
     ExpenseRequestDTO newExpense = new ExpenseRequestDTO(
         expenseCost,
-        categoryId,
+        initCategoryId,
         expenseComment,
-        userId
+        initUserId
     );
     mockMvc.perform(post("/expenses")
             .contentType(MediaType.APPLICATION_JSON)
@@ -187,5 +189,43 @@ class ExpensesControllerTest {
                 "org.springframework.web.servlet.resource.NoResourceFoundException",
                 "No static resource expensesnotvalidendpoint."],
                 "errorType":"UNHANDLED_ERROR"}"""));
+  }
+
+  @SneakyThrows
+  private String findIdByAttributeValue(String attributeValue, String typeOfEntity) {
+    String urlTemplate;
+    String searchAttribute;
+    String idAttribute;
+    switch (typeOfEntity) {
+      case "category":
+        urlTemplate = "/categories";
+        searchAttribute = "categoryName";
+        idAttribute = "categoryId";
+        break;
+      case "expense":
+        urlTemplate = "/expenses";
+        searchAttribute = "expenseComment";
+        idAttribute = "expenseId";
+        break;
+      case "user":
+        urlTemplate = "/users";
+        searchAttribute = "userName";
+        idAttribute = "userId";
+        break;
+      default:
+        throw new IllegalStateException("Unexpected value: " + typeOfEntity);
+    }
+    String result =  mockMvc.perform(get(urlTemplate)).andReturn().getResponse().getContentAsString();
+    String[] inBase = JsonPath.read(result, "$[*]." + searchAttribute)
+        .toString().replaceAll(regex, "").split(",");
+    int index = Arrays.asList(inBase).indexOf(attributeValue);
+
+    if (index < 0) {
+      return JsonPath.read(result, "$[*]." + idAttribute)
+          .toString().replaceAll(regex, "");
+    } else {
+      return JsonPath.read(result, "$[*]." + idAttribute)
+          .toString().replaceAll(regex, "").split(",")[index];
+    }
   }
 }

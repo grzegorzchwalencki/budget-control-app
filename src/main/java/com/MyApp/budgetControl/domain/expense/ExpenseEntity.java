@@ -1,6 +1,7 @@
 package com.MyApp.budgetControl.domain.expense;
 
 import com.MyApp.budgetControl.domain.category.CategoryEntity;
+import com.MyApp.budgetControl.domain.expense.dto.ExpenseRequestDTO;
 import com.MyApp.budgetControl.domain.user.UserEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
@@ -11,12 +12,13 @@ import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import java.time.Instant;
-import java.util.UUID;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import java.time.Instant;
+import java.util.UUID;
 
 
 @Value
