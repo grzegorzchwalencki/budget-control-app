@@ -22,7 +22,7 @@ jobs:
         uses: gradle/actions/setup-gradle@af1da67850ed9a4cedd57bfd976089dd991e2582 
         
       - name: Build and Run Tests
-        run: ./gradlew build
+        run: bash ./gradlew build
         
       - name: Publish Test Report
         uses: mikepenz/action-junit-report@v5
