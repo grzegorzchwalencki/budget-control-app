@@ -1,7 +1,6 @@
-name: Java CI with Gradle
+name: Build and test Budget Control App
 
-on:
-  push:
+on: push
   
 jobs:
   build:
