@@ -1,5 +1,7 @@
 package com.MyApp.budgetControl.domain.category;
 
+import com.MyApp.budgetControl.domain.category.dto.CategoryRequestDTO;
+import com.MyApp.budgetControl.domain.category.dto.CategoryResponseDTO;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

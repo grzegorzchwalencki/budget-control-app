@@ -1,10 +1,9 @@
-package com.MyApp.budgetControl.api;
+package com.MyApp.budgetControl.api.controller;
 
 import com.MyApp.budgetControl.domain.ServicesOrchestrator;
-import com.MyApp.budgetControl.domain.expense.ExpenseRequestDTO;
-import com.MyApp.budgetControl.domain.expense.ExpenseResponseDTO;
+import com.MyApp.budgetControl.domain.user.dto.UserRequestDTO;
+import com.MyApp.budgetControl.domain.user.dto.UserResponseDTO;
 import jakarta.validation.Valid;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -16,32 +15,35 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/expenses")
-public class ExpensesController {
+@RequestMapping("/users")
+public class UserController {
 
   private final ServicesOrchestrator servicesOrchestrator;
 
   @GetMapping
-  public List<ExpenseResponseDTO> getExpenses() {
-    return servicesOrchestrator.findAllExpenses();
+  public List<UserResponseDTO> getUsers() {
+    return servicesOrchestrator.findAllUsers();
   }
 
-  @GetMapping("/{expenseId}")
-  public ExpenseResponseDTO getExpenseById(@PathVariable String expenseId) {
-    return servicesOrchestrator.findExpenseById(expenseId);
+  @GetMapping("/{userId}")
+  public UserResponseDTO getUserById(@PathVariable String userId) {
+    return servicesOrchestrator.findUserById(userId);
   }
 
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
-  public void addNewExpense(@Valid @RequestBody ExpenseRequestDTO newExpense) {
-    servicesOrchestrator.saveExpense(newExpense);
+  public void addNewUser(@Valid @RequestBody UserRequestDTO newUser) {
+    servicesOrchestrator.saveUser(newUser);
   }
 
-  @DeleteMapping("/{expenseId}")
+  @DeleteMapping("/{userId}")
   @ResponseStatus(HttpStatus.ACCEPTED)
-  public void deleteExpense(@PathVariable String expenseId) {
-    servicesOrchestrator.deleteExpenseById(expenseId);
+  public void deleteUser(@PathVariable String userId) {
+    servicesOrchestrator.deleteUserById(userId);
   }
+
 }

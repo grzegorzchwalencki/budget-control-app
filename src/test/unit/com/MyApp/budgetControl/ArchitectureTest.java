@@ -44,7 +44,7 @@ public class ArchitectureTest {
         .that().areAnnotatedWith("org.springframework.stereotype.Service")
         .and().resideInAPackage("..domain.(**)..")
         .should().dependOnClassesThat().areAnnotatedWith("org.springframework.stereotype.Service")
-        .andShould().dependOnClassesThat().resideInAnyPackage("..category..","..expense..", "..user..")
+        .andShould().dependOnClassesThat().resideInAnyPackage("..category..", "..expense..", "..user..")
         .check(classes);
   }
 }

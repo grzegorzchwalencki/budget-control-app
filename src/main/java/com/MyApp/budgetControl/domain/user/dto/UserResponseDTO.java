@@ -1,6 +1,7 @@
-package com.MyApp.budgetControl.domain.user;
+package com.MyApp.budgetControl.domain.user.dto;
 
-import com.MyApp.budgetControl.domain.expense.ExpenseResponseDTO;
+import com.MyApp.budgetControl.domain.expense.dto.ExpenseResponseDTO;
+import com.MyApp.budgetControl.domain.user.UserEntity;
 import lombok.Value;
 
 import java.util.List;

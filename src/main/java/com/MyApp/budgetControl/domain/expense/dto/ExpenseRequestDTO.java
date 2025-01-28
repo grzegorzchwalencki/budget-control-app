@@ -1,4 +1,4 @@
-package com.MyApp.budgetControl.domain.expense;
+package com.MyApp.budgetControl.domain.expense.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.DecimalMin;
