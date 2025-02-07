@@ -1,9 +1,8 @@
 package com.MyApp.budgetControl.domain.user;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-
 import java.util.List;
 import java.util.Optional;
+import org.springframework.data.jpa.repository.JpaRepository;
 
 interface UserJpaRepository extends UserRepository, JpaRepository<UserEntity, String> {
 

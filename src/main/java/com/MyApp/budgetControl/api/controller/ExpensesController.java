@@ -1,8 +1,8 @@
-package com.MyApp.budgetControl.api;
+package com.MyApp.budgetControl.api.controller;
 
 import com.MyApp.budgetControl.domain.ServicesOrchestrator;
-import com.MyApp.budgetControl.domain.expense.ExpenseRequestDTO;
-import com.MyApp.budgetControl.domain.expense.ExpenseResponseDTO;
+import com.MyApp.budgetControl.domain.expense.dto.ExpenseRequestDTO;
+import com.MyApp.budgetControl.domain.expense.dto.ExpenseResponseDTO;
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;

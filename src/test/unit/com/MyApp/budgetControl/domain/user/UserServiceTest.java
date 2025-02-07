@@ -5,6 +5,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.when;
 
+import com.MyApp.budgetControl.domain.user.dto.UserRequestDTO;
+import com.MyApp.budgetControl.domain.user.dto.UserResponseDTO;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;

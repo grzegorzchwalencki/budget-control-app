@@ -1,5 +1,8 @@
 package com.MyApp.budgetControl.api;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.NoSuchElementException;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -8,10 +11,6 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
-
-import java.util.Arrays;
-import java.util.List;
-import java.util.NoSuchElementException;
 
 @ControllerAdvice
 class GlobalExceptionHandler {
