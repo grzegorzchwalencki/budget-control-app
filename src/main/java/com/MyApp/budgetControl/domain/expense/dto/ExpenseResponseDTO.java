@@ -1,9 +1,8 @@
 package com.MyApp.budgetControl.domain.expense.dto;
 
 import com.MyApp.budgetControl.domain.expense.ExpenseEntity;
-import lombok.Value;
-
 import java.time.Instant;
+import lombok.Value;
 
 @Value
 public class ExpenseResponseDTO {

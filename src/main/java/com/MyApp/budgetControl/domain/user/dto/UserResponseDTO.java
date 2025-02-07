@@ -2,9 +2,8 @@ package com.MyApp.budgetControl.domain.user.dto;
 
 import com.MyApp.budgetControl.domain.expense.dto.ExpenseResponseDTO;
 import com.MyApp.budgetControl.domain.user.UserEntity;
-import lombok.Value;
-
 import java.util.List;
+import lombok.Value;
 
 @Value
 public class UserResponseDTO {
