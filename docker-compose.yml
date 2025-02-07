@@ -1,0 +1,23 @@
+services:
+  db:
+    image: postgres:17.2-alpine3.21
+    container_name: db
+    environment:
+      POSTGRES_PASSWORD: password
+      POSTGRES_USER: postgres
+      POSTGRES_DB: testdb
+      POSTGRES_HOST_AUTH_METHOD: trust
+    ports:
+      - "5432:5432"
+
+  app:
+    image: 'budget-control-app'
+    build:
+      dockerfile: Dockerfile
+    container_name: app
+    depends_on:
+      - db
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5432/testdb
+    ports:
+      - "8080:8080"
