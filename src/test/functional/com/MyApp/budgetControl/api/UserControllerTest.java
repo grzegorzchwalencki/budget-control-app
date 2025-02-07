@@ -14,7 +14,10 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
 import java.util.UUID;
 import lombok.SneakyThrows;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -23,6 +26,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class UserControllerTest {
 
   @Autowired
@@ -30,15 +34,24 @@ class UserControllerTest {
   @Autowired
   private ObjectMapper objectMapper;
 
+  private static final String user1 = """
+      {"userName":"userName1",
+      "userEmail":"userEmail1@test.com"}""";
+  private static final String user2 = """
+      {"userName":"userName2",
+      "userEmail":"userEmail2@test.com"}""";
+  private static final String regex = "[\"\\[\\]]";
+
   @Test
+  @Order(1)
   @SneakyThrows
   void getUserMethodShouldReturnAllExistingRecordsCode200andAppJsonContentType() {
     mockMvc.perform(post("/users")
         .contentType(MediaType.APPLICATION_JSON)
-        .content("{\"userName\":\"userName1\", \"userEmail\":\"userEmail1@test.com\"}"));
+        .content(user1));
     mockMvc.perform(post("/users")
         .contentType(MediaType.APPLICATION_JSON)
-        .content("{\"userName\":\"userName2\", \"userEmail\":\"userEmail2@test.com\"}"));
+        .content(user2));
     mockMvc.perform(get("/users"))
         .andDo(print())
         .andExpect(status().isOk())
@@ -48,28 +61,29 @@ class UserControllerTest {
   }
 
   @Test
+  @Order(2)
   @SneakyThrows
   void getUserByIdMethodShouldReturnCode200andAppJsonContentTypeWithCorrectJsonContent() {
     mockMvc.perform(post("/users")
         .contentType(MediaType.APPLICATION_JSON)
-        .content("{\"userName\":\"userName1\", \"userEmail\":\"userEmail1@test.com\"}"));
+        .content(user1));
 
-    String result =  mockMvc.perform(get("/users")).andReturn().getResponse().getContentAsString()
-        .replace("[", "").replace("]", "");
-    String id = JsonPath.read(result, "$.userId");
+    String result =  mockMvc.perform(get("/users")).andReturn().getResponse().getContentAsString();
+    String id = JsonPath.read(result, "$[*].userId").toString().replaceAll(regex, "").split(",")[0];
 
     mockMvc.perform(get("/users/" + id))
            .andDo(print())
            .andExpect(status().isOk())
            .andExpect(content().contentType("application/json"))
            .andExpect(content().json("{\"userId\":" + id
-               + ",\"userName\":\"userName1\",\"userEmail\":\"userEmail1@test.com\"}"));
+               + ",\"userName\":\"userName1\","
+               + "\"userEmail\":\"userEmail1@test.com\",\"userExpenses\":[]}"));
   }
 
   @Test
   @SneakyThrows
   void getUserByIdMethodForNotExistingIdShouldReturnCode404HandlingNoSuchElementException() {
-    mockMvc.perform(get("/users/1f76ff4a-d3e6-479e-b74f-ffffffffffff"))
+    mockMvc.perform(get("/users/not-existing-user-id"))
            .andDo(print())
            .andExpect(status().isNotFound())
            .andExpect(content().contentType("application/json"))
@@ -115,11 +129,10 @@ class UserControllerTest {
   void deleteUserShouldRemoveItFromRepositoryAndReturnStatusAccepted() {
     mockMvc.perform(post("/users")
         .contentType(MediaType.APPLICATION_JSON)
-        .content("{\"userName\":\"userName1\", \"userEmail\":\"userEmail1@test.com\"}"));
+        .content(user1));
 
-    String result =  mockMvc.perform(get("/users")).andReturn().getResponse().getContentAsString()
-        .replace("[", "").replace("]", "");
-    String id = JsonPath.read(result, "$.userId");
+    String result =  mockMvc.perform(get("/users")).andReturn().getResponse().getContentAsString();
+    String id = JsonPath.read(result, "$[*].userId").toString().replaceAll(regex, "").split(",")[0];
 
     mockMvc.perform(delete("/users/" + id)
             .contentType(MediaType.APPLICATION_JSON))
@@ -136,7 +149,7 @@ class UserControllerTest {
   @Test
   @SneakyThrows
   void deleteUserThatNotExistShouldThrowAnExceptionAndReturnStatusNotFound() {
-    mockMvc.perform(delete("/users/ff4d7eba-f503-4d6a-8e29-ff1ff1ff1ff")
+    mockMvc.perform(delete("/users/not-existing-user-id")
             .contentType(MediaType.APPLICATION_JSON))
         .andDo(print())
         .andExpect(status().isNotFound())

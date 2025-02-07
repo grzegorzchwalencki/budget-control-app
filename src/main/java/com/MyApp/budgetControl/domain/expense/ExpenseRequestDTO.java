@@ -29,4 +29,8 @@ public class ExpenseRequestDTO {
   @JsonProperty("expenseComment")
   private final String expenseComment;
 
+  @NotBlank(message = "User id is mandatory")
+  @JsonProperty("userId")
+  private final String userId;
+
 }

@@ -9,7 +9,7 @@ interface ExpenseRepository {
 
   List<ExpenseEntity> findAll();
 
-  Optional<ExpenseEntity> findByExpenseId(String expenseId);
+  Optional<ExpenseEntity> findById(String expenseId);
 
-  void deleteByExpenseId(String expenseId);
+  void deleteById(String expenseId);
 }

@@ -11,8 +11,8 @@ interface UserJpaRepository extends UserRepository, JpaRepository<UserEntity, St
 
   List<UserEntity> findAll();
 
-  Optional<UserEntity> findByUserId(String userId);
+  Optional<UserEntity> findById(String userId);
 
-  void deleteByUserId(String userId);
+  void deleteById(String userId);
 
 }
