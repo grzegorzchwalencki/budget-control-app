@@ -1,5 +1,6 @@
-package com.MyApp.budgetControl.domain.category;
+package com.MyApp.budgetControl.domain.category.dto;
 
+import com.MyApp.budgetControl.domain.category.CategoryEntity;
 import lombok.Value;
 
 @Value

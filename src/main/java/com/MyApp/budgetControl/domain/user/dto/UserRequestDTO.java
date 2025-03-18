@@ -1,4 +1,4 @@
-package com.MyApp.budgetControl.domain.user;
+package com.MyApp.budgetControl.domain.user.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.Email;

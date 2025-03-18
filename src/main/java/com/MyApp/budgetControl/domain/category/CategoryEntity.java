@@ -1,5 +1,6 @@
 package com.MyApp.budgetControl.domain.category;
 
+import com.MyApp.budgetControl.domain.category.dto.CategoryRequestDTO;
 import com.MyApp.budgetControl.domain.expense.ExpenseEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;

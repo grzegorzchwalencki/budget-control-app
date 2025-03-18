@@ -1,4 +1,4 @@
-package com.MyApp.budgetControl.domain.category;
+package com.MyApp.budgetControl.domain.category.dto;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
