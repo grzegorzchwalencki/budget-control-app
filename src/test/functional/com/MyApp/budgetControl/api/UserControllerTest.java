@@ -20,11 +20,15 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@ActiveProfiles(value = "test")
+@Import(TestContainersConfiguration.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 class UserControllerTest {
 
@@ -40,13 +44,7 @@ class UserControllerTest {
       "userEmail":"%s"}""", userName, faker.internet().emailAddress());
   }
 
-  private static final String user1 = """
-      {"userName":"userName1",
-      "userEmail":"userEmail1@test.com"}""";
-  private static final String user2 = """
-      {"userName":"userName2",
-      "userEmail":"userEmail2@test.com"}""";
-  private static final String regex = "[\"\\[\\]]";
+    private static final String regex = "[\"\\[\\]]";
 
   @Test
   @SneakyThrows
@@ -162,7 +160,10 @@ class UserControllerTest {
     String result =  mockMvc.perform(get("/users")).andReturn().getResponse().getContentAsString();
     String[] usersInBase = JsonPath.read(result, "$[*].userName").toString().replaceAll(regex, "").split(",");
     int index = Arrays.asList(usersInBase).indexOf(userName);
-    String id = JsonPath.read(result, "$[*].userId").toString().replaceAll(regex, "").split(",")[index];
-    return id;
+    return JsonPath
+        .read(result, "$[*].userId")
+        .toString()
+        .replaceAll(regex, "")
+        .split(",")[index];
   }
 }
