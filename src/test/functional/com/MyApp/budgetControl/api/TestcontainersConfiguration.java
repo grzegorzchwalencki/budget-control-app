@@ -1,22 +1,29 @@
 package com.MyApp.budgetControl.api;
 
-import org.springframework.boot.test.context.TestConfiguration;
+import org.junit.jupiter.api.AfterAll;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
 import org.testcontainers.containers.PostgreSQLContainer;
-import org.testcontainers.junit.jupiter.Container;
-import org.testcontainers.junit.jupiter.Testcontainers;
 
-@TestConfiguration
-@Testcontainers
-class TestContainersConfiguration {
+abstract class TestContainersConfiguration {
 
-  @Container
-  static PostgreSQLContainer<?> postgreSQLContainer = new PostgreSQLContainer<>
+  private static final PostgreSQLContainer<?> postgres = new PostgreSQLContainer<>
       ("postgres:17.2-alpine3.21");
 
   static {
-    System.setProperty("spring.datasource.url", postgreSQLContainer.getJdbcUrl());
-    System.setProperty("spring.datasource.password", postgreSQLContainer.getPassword());
-    System.setProperty("spring.datasource.username", postgreSQLContainer.getUsername());
-    }
+    postgres.start();
 
+  }
+
+  @DynamicPropertySource
+  static void configureProperties(DynamicPropertyRegistry registry) {
+    registry.add("spring.datasource.url", postgres::getJdbcUrl);
+    registry.add("spring.datasource.username", postgres::getUsername);
+    registry.add("spring.datasource.password", postgres::getPassword);
+  }
+
+  @AfterAll
+  static void afterAll() {
+    postgres.stop();
+  }
 }
