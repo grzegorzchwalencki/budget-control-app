@@ -12,7 +12,6 @@ abstract class TestContainersConfiguration {
 
   static {
     postgres.start();
-
   }
 
   @DynamicPropertySource
