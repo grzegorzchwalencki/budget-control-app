@@ -19,7 +19,7 @@ public class CategoryService {
   }
 
   public List<CategoryResponseDTO> findAllCategories() {
-    return  categoryRepository.findAll().stream().map(CategoryResponseDTO::new).toList();
+    return categoryRepository.findAll().stream().map(CategoryResponseDTO::new).toList();
   }
 
   public CategoryEntity findCategoryById(String categoryId) {

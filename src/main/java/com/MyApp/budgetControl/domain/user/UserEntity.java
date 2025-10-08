@@ -49,7 +49,7 @@ public class UserEntity {
   @Size(max = 64, message = "Email address max length is 64 char")
   private final String userEmail;
 
-  @OneToMany(mappedBy="user")
+  @OneToMany(mappedBy = "userId")
   @JdbcTypeCode(SqlTypes.JSON)
   private List<ExpenseEntity> userExpenses;
 

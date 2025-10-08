@@ -28,13 +28,13 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 @EntityListeners(AuditingEntityListener.class)
 public class ExpenseEntity {
 
-  ExpenseEntity(ExpenseRequestDTO expenseRequestDTO, CategoryEntity category, UserEntity user) {
+  ExpenseEntity(ExpenseRequestDTO expenseRequestDTO, CategoryEntity categoryId, UserEntity userId) {
     this.expenseId = UUID.randomUUID().toString();
     this.expenseCost = expenseRequestDTO.getExpenseCost();
-    this.expenseCategory = category;
+    this.categoryId = categoryId;
     this.expenseComment = expenseRequestDTO.getExpenseComment();
     this.expenseDate = Instant.now();
-    this.user = user;
+    this.userId = userId;
   }
 
   @Id
@@ -46,7 +46,7 @@ public class ExpenseEntity {
 
   @NotNull(message = "Category is mandatory")
   @ManyToOne
-  private final CategoryEntity expenseCategory;
+  private final CategoryEntity categoryId;
 
   @NotBlank(message = "Comment is mandatory")
   @Size(max = 128, message = "Comment max length is 128 char")
@@ -57,6 +57,6 @@ public class ExpenseEntity {
 
   @NotNull(message = "User id is mandatory")
   @ManyToOne
-  private final UserEntity user;
+  private final UserEntity userId;
 
 }

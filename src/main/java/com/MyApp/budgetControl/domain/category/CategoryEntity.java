@@ -40,7 +40,7 @@ public class CategoryEntity {
   @Column(unique = true)
   private final String categoryName;
 
-  @OneToMany(mappedBy = "expenseCategory")
+  @OneToMany(mappedBy = "categoryId")
   @JdbcTypeCode(SqlTypes.JSON)
   private List<ExpenseEntity> categoryExpenses;
 

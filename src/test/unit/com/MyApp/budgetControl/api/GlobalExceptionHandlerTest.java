@@ -25,7 +25,7 @@ public class GlobalExceptionHandlerTest {
       BindingResult bindingResult = new BeanPropertyBindingResult(new Object(), "ErrorResponse");
       bindingResult.addError(new FieldError("ErrorResponse", "errorDetails", "Cost value should be positive"));
       throw new MethodArgumentNotValidException(
-                  new MethodParameter(this.getClass().getDeclaredMethods()[0], -1), bindingResult);
+          new MethodParameter(this.getClass().getDeclaredMethods()[0], -1), bindingResult);
     } catch (Exception ex) {
       GlobalExceptionHandler handler = new GlobalExceptionHandler();
       ErrorResponse response = handler.handleMethodArgumentNotValidException((MethodArgumentNotValidException) ex);

@@ -20,9 +20,9 @@ public class ExpenseRequestDTO {
   private final double expenseCost;
 
   @NotBlank(message = "Category is mandatory")
-  @Size(max = 64, message = "Category max length is 64 char")
-  @JsonProperty("expenseCategory")
-  private final String expenseCategory;
+  @Size(max = 36)
+  @JsonProperty("categoryId")
+  private final String categoryId;
 
   @NotBlank(message = "Comment is mandatory")
   @Size(max = 128, message = "Comment max length is 128 char")
@@ -30,6 +30,7 @@ public class ExpenseRequestDTO {
   private final String expenseComment;
 
   @NotBlank(message = "User id is mandatory")
+  @Size(max = 36)
   @JsonProperty("userId")
   private final String userId;
 

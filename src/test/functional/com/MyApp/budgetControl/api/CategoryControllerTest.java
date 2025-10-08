@@ -21,7 +21,7 @@ import org.springframework.test.web.servlet.MockMvc;
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles(value = "test")
-public class CategoryControllerTest extends TestContainersConfiguration{
+public class CategoryControllerTest extends TestContainersConfiguration {
 
   @Autowired
   private MockMvc mockMvc;

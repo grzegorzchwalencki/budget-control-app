@@ -18,11 +18,11 @@ class ErrorResponse {
   }
 
   public static ErrorResponse forUnhandledError(List<String> errorDetails) {
-    return  new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), errorDetails, ErrorType.UNHANDLED_ERROR);
+    return new ErrorResponse(HttpStatus.INTERNAL_SERVER_ERROR.value(), errorDetails, ErrorType.UNHANDLED_ERROR);
   }
 
   public static ErrorResponse forNotFoundError(List<String> errorDetails) {
-    return  new ErrorResponse(HttpStatus.NOT_FOUND.value(), errorDetails, ErrorType.NOT_FOUND_ERROR);
+    return new ErrorResponse(HttpStatus.NOT_FOUND.value(), errorDetails, ErrorType.NOT_FOUND_ERROR);
   }
 
   public static ErrorResponse forConflictError(List<String> errorDetails) {
@@ -30,10 +30,10 @@ class ErrorResponse {
   }
 
   enum ErrorType {
-        VALIDATION_ERROR,
-        NOT_FOUND_ERROR,
-        UNHANDLED_ERROR,
-        CONFLICT_ERROR
+    VALIDATION_ERROR,
+    NOT_FOUND_ERROR,
+    UNHANDLED_ERROR,
+    CONFLICT_ERROR
   }
 }
 

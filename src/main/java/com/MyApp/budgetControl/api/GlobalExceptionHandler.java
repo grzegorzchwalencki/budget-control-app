@@ -35,9 +35,9 @@ class GlobalExceptionHandler {
   @ExceptionHandler(value = Exception.class)
   public @ResponseBody ErrorResponse handleUnexpectedErrors(Exception ex) {
     List<String> errorMessage = Arrays.asList(
-            unknownErrorMessage,
-            ex.getClass().getCanonicalName(),
-            ex.getMessage());
+        unknownErrorMessage,
+        ex.getClass().getCanonicalName(),
+        ex.getMessage());
     return ErrorResponse.forUnhandledError(errorMessage);
   }
 
@@ -45,7 +45,7 @@ class GlobalExceptionHandler {
   @ExceptionHandler(value = NoSuchElementException.class)
   public @ResponseBody ErrorResponse handleNoSuchElementExceptions(NoSuchElementException ex) {
     List<String> errorMessage = List.of(notFoundMessage);
-    return  ErrorResponse.forNotFoundError(errorMessage);
+    return ErrorResponse.forNotFoundError(errorMessage);
   }
 
   @ResponseStatus(HttpStatus.CONFLICT)

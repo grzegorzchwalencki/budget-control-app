@@ -18,7 +18,7 @@ public class UserRequestDTO {
   @JsonProperty("userName")
   private final String userName;
 
-  @Email(message="Please provide a valid email address")
+  @Email(message = "Please provide a valid email address")
   @NotBlank(message = "Email address is mandatory")
   @Size(max = 64, message = "Email address max length is 64 char")
   @JsonProperty("userEmail")

@@ -4,5 +4,5 @@ spring:
       ddl-auto: update
 
   flyway:
-      enabled: false
+    enabled: false
 

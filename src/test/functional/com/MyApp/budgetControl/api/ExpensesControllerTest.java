@@ -33,7 +33,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 @AutoConfigureMockMvc
 @ActiveProfiles(value = "test")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
-class ExpensesControllerTest extends TestContainersConfiguration{
+class ExpensesControllerTest extends TestContainersConfiguration {
 
   @Autowired
   private MockMvc mockMvc;
@@ -57,12 +57,12 @@ class ExpensesControllerTest extends TestContainersConfiguration{
         .contentType(MediaType.APPLICATION_JSON)
         .content("{\"userName\":\"" + userName + "\",\"userEmail\":\"test@test.com\"}"));
     initUserId = findIdByAttributeValue(userName, "user");
-    
+
     mockMvc.perform(post("/categories")
         .contentType(MediaType.APPLICATION_JSON)
         .content("{\"categoryName\":\"" + categoryName + "\"}"));
     initCategoryId = findIdByAttributeValue(categoryName, "category");
-    
+
     mockMvc.perform(post("/expenses")
         .contentType(MediaType.APPLICATION_JSON)
         .content(objectMapper.writeValueAsString(
@@ -74,36 +74,36 @@ class ExpensesControllerTest extends TestContainersConfiguration{
   @SneakyThrows
   void getExpensesMethodShouldReturnAllExistingRecordsCode200andAppJsonContentType() {
     mockMvc.perform(get("/expenses"))
-           .andDo(print())
-           .andExpect(status().isOk())
-           .andExpect(content().contentType("application/json"))
-           .andExpect(jsonPath("$[*].expenseComment", hasItem(comment)));
+        .andDo(print())
+        .andExpect(status().isOk())
+        .andExpect(content().contentType("application/json"))
+        .andExpect(jsonPath("$[*].expenseComment", hasItem(comment)));
   }
 
   @Test
   @SneakyThrows
   void getExpenseByIdMethodShouldReturnCode200andAppJsonContentTypeWithCorrectJsonContent() {
     mockMvc.perform(get("/expenses/" + initExpenseId))
-           .andDo(print())
-           .andExpect(status().isOk())
-           .andExpect(content().contentType("application/json"))
-           .andExpect(content().json(String.format("""
-               {"expenseCost":123.0,
-               "expenseCategory":"%s",
-               "expenseComment":"%s"}""", categoryName, comment)));
+        .andDo(print())
+        .andExpect(status().isOk())
+        .andExpect(content().contentType("application/json"))
+        .andExpect(content().json(String.format("""
+            {"expenseCost":123.0,
+            "categoryId":"%s",
+            "expenseComment":"%s"}""", initCategoryId, comment)));
   }
 
   @Test
   @SneakyThrows
   void getExpenseByIdMethodForNotExistingIdShouldReturnCode404HandlingNoSuchElementException() {
     mockMvc.perform(get("/expenses/not-existing-expense-id"))
-           .andDo(print())
-           .andExpect(status().isNotFound())
-           .andExpect(content().contentType("application/json"))
-           .andExpect(content().json("""
-                  {"statusCode":404,
-                  "errorDetails":["Element with given Id does not exist"],
-                  "errorType":"NOT_FOUND_ERROR"}"""));
+        .andDo(print())
+        .andExpect(status().isNotFound())
+        .andExpect(content().contentType("application/json"))
+        .andExpect(content().json("""
+            {"statusCode":404,
+            "errorDetails":["Element with given Id does not exist"],
+            "errorType":"NOT_FOUND_ERROR"}"""));
   }
 
   @Test
@@ -216,7 +216,7 @@ class ExpensesControllerTest extends TestContainersConfiguration{
       default:
         throw new IllegalStateException("Unexpected value: " + typeOfEntity);
     }
-    String result =  mockMvc.perform(get(urlTemplate)).andReturn().getResponse().getContentAsString();
+    String result = mockMvc.perform(get(urlTemplate)).andReturn().getResponse().getContentAsString();
     String[] inBase = JsonPath.read(result, "$[*]." + searchAttribute)
         .toString().replaceAll(regex, "").split(",");
     int index = Arrays.asList(inBase).indexOf(attributeValue);

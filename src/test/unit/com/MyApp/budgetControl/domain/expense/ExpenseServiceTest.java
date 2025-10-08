@@ -32,9 +32,9 @@ class ExpenseServiceTest {
   @InjectMocks
   ExpenseService subject;
   static Instant date = new Date().toInstant();
-  static String rndUUID1 =  UUID.randomUUID().toString();
-  static String rndUUID2 =  UUID.randomUUID().toString();
-  static String rndUUID3 =  UUID.randomUUID().toString();
+  static String rndUUID1 = UUID.randomUUID().toString();
+  static String rndUUID2 = UUID.randomUUID().toString();
+  static String rndUUID3 = UUID.randomUUID().toString();
   static List<ExpenseEntity> expenses;
   static UserEntity user = new UserEntity(rndUUID3, "testUserName", "testUser@email.com", new ArrayList<>());
   static CategoryEntity category = new CategoryEntity(rndUUID3, "testCategory", new ArrayList<>());

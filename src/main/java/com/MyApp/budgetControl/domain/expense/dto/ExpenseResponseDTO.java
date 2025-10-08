@@ -10,17 +10,17 @@ public class ExpenseResponseDTO {
   public ExpenseResponseDTO(ExpenseEntity expense) {
     this.expenseId = expense.getExpenseId();
     this.expenseCost = expense.getExpenseCost();
-    this.expenseCategory = expense.getExpenseCategory().getCategoryName();
+    this.categoryId = expense.getCategoryId().getCategoryId();
     this.expenseComment = expense.getExpenseComment();
     this.expenseDate = expense.getExpenseDate();
-    this.userName = expense.getUser().getUserName();
+    this.userId = expense.getUserId().getUserId();
   }
 
   private final String expenseId;
   private final double expenseCost;
-  private final String expenseCategory;
+  private final String categoryId;
   private final String expenseComment;
   private final Instant expenseDate;
-  private final String userName;
+  private final String userId;
 
 }

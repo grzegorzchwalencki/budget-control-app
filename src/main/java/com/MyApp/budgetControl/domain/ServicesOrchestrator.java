@@ -39,7 +39,7 @@ public class ServicesOrchestrator {
   // EXPENSE
 
   public void saveExpense(ExpenseRequestDTO expenseRequestDTO) {
-    CategoryEntity category = categoryService.findCategoryById(expenseRequestDTO.getExpenseCategory());
+    CategoryEntity category = categoryService.findCategoryById(expenseRequestDTO.getCategoryId());
     UserEntity user = userService.findUserById(expenseRequestDTO.getUserId());
     expenseService.saveExpense(expenseRequestDTO, category, user);
   }
