@@ -13,7 +13,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
-@SpringBootTest
+@SpringBootTest()
 @AutoConfigureMockMvc
 @ActiveProfiles(value = "test")
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)

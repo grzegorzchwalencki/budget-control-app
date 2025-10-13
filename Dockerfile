@@ -1,11 +1,11 @@
 #Build stage
-FROM gradle:jdk17-corretto AS build
+FROM gradle:9.1.0-jdk25-corretto AS build
 WORKDIR /usr/app/
 COPY --chown=gradle:gradle . .
 RUN gradle build -x test --no-daemon
 
 # Package stage
-FROM eclipse-temurin:17-jre-ubi9-minimal
+FROM eclipse-temurin:25-jdk-ubi10-minimal
 WORKDIR /usr/app/
 RUN adduser -m appuser
 USER appuser
