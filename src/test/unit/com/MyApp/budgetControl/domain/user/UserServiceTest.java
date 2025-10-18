@@ -52,12 +52,12 @@ public class UserServiceTest {
   void getUserByIdForExistingIdIsReturningCorrectUser() {
     when(mockRepository.findAll()).thenReturn(users);
     List<UserResponseDTO> users = subject.findAllUsers();
-    String userId = users.get(0).getUserId();
+    String userId = users.getFirst().getUserId();
     when(mockRepository.findById(userId)).thenReturn(Optional.of(
         new UserEntity(userId, "testUsername1", "testEmail1@test.com", new ArrayList<>())));
     UserEntity result = subject.findUserById(userId);
     String expectedUserName = "testUsername1";
-    assertEquals(result.getUserName(), expectedUserName);
+    assertEquals(expectedUserName, result.getUserName());
   }
 
   @Test

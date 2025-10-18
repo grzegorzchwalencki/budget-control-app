@@ -87,10 +87,10 @@ class ExpensesControllerTest extends TestContainersConfiguration {
         .andDo(print())
         .andExpect(status().isOk())
         .andExpect(content().contentType("application/json"))
-        .andExpect(content().json(String.format("""
+        .andExpect(content().json("""
             {"expenseCost":123.0,
             "categoryId":"%s",
-            "expenseComment":"%s"}""", initCategoryId, comment)));
+            "expenseComment":"%s"}""".formatted(initCategoryId, comment)));
   }
 
   @Test

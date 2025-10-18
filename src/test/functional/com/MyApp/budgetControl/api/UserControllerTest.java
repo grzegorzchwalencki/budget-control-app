@@ -31,9 +31,9 @@ class UserControllerTest extends TestContainersConfiguration {
   Faker faker = new Faker();
 
   public String generateUser(String userName) {
-    return String.format("""
+    return """
         {"userName":"%s",
-        "userEmail":"%s"}""", userName, faker.internet().emailAddress());
+        "userEmail":"%s"}""".formatted(userName, faker.internet().emailAddress());
   }
 
   private static final String regex = "[\"\\[\\]]";
