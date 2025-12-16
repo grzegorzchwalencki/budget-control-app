@@ -1,8 +1,9 @@
 plugins {
-	id "java"
-	id "org.springframework.boot" version "${springBootVersion}"
-	id "io.spring.dependency-management" version "${springDependencyManagementVersion}"
-	id "jacoco"
+    id "java"
+    id "org.springframework.boot" version "${springBootVersion}"
+    id "io.spring.dependency-management" version "${springDependencyManagementVersion}"
+    id "jacoco"
+    id "groovy"
 }
 
 group = "com.MyApp"
@@ -24,6 +25,13 @@ repositories {
 	mavenCentral()
 }
 
+dependencyManagement {
+	imports {
+		mavenBom "org.apache.groovy:groovy-bom:${groovyVersion}"
+		mavenBom "org.spockframework:spock-bom:${spockVersion}"
+	}
+}
+
 dependencies {
 	implementation "org.springframework.boot:spring-boot-starter-web"
 	implementation "org.springframework.boot:spring-boot-starter-validation"
@@ -41,12 +49,16 @@ dependencies {
 	testCompileOnly "org.projectlombok:lombok"
 	testAnnotationProcessor "org.projectlombok:lombok"
 
+
 	testImplementation "org.springframework.boot:spring-boot-starter-test"
 	testImplementation "com.tngtech.archunit:archunit-junit5:${archunitVersion}"
 	testImplementation "net.datafaker:datafaker:${datafakerVersion}"
 	testImplementation "org.junit.jupiter:junit-jupiter:${junitVersion}"
 	testImplementation "org.testcontainers:junit-jupiter:${testcontainersVersion}"
 	testImplementation "org.testcontainers:postgresql:${testcontainersVersion}"
+
+    testImplementation "org.spockframework:spock-core"
+    testImplementation "org.spockframework:spock-spring"
 }
 
 tasks.named("test") {
@@ -54,7 +66,7 @@ tasks.named("test") {
 }
 
 sourceSets {
-	test.java.srcDirs(
+	test.groovy.srcDirs(
 			"src/test/unit",
 			"src/test/functional"
 	)
