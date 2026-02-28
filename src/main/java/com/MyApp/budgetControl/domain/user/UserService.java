@@ -4,6 +4,7 @@ import com.MyApp.budgetControl.domain.user.dto.UserRequestDTO;
 import com.MyApp.budgetControl.domain.user.dto.UserResponseDTO;
 import jakarta.transaction.Transactional;
 import java.util.List;
+import java.util.NoSuchElementException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -29,7 +30,8 @@ public class UserService {
 
   @Transactional
   public void deleteUserById(String userId) {
-    UserEntity user = userRepository.findById(userId).get();
+    userRepository.findById(userId)
+        .orElseThrow(() -> new NoSuchElementException("User with id " + userId + " not found"));
     userRepository.deleteById(userId);
   }
 

@@ -32,7 +32,7 @@ public class ServicesOrchestrator {
     return categoryService.findAllCategories();
   }
 
-  public CategoryResponseDTO findByCategoryId(String categoryId) {
+  public CategoryResponseDTO findCategoryById(String categoryId) {
     return new CategoryResponseDTO(categoryService.findCategoryById(categoryId));
   }
 

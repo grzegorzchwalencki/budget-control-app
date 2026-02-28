@@ -6,6 +6,7 @@ import com.MyApp.budgetControl.domain.expense.dto.ExpenseResponseDTO;
 import com.MyApp.budgetControl.domain.user.UserEntity;
 import jakarta.transaction.Transactional;
 import java.util.List;
+import java.util.NoSuchElementException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -34,7 +35,8 @@ public class ExpenseService {
 
   @Transactional
   public void deleteExpenseById(String expenseId) {
-    ExpenseEntity expense = expenseRepository.findById(expenseId).get();
+    expenseRepository.findById(expenseId)
+        .orElseThrow(() -> new NoSuchElementException("Expense with id " + expenseId + " not found"));
     expenseRepository.deleteById(expenseId);
   }
 }
