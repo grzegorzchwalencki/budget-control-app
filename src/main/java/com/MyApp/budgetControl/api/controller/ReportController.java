@@ -1,9 +1,9 @@
 package com.MyApp.budgetControl.api.controller;
 
-import com.MyApp.budgetControl.report.MonthlyExpenseReportDTO;
 import com.MyApp.budgetControl.report.ReportService;
+import com.MyApp.budgetControl.report.dto.MonthlyReportDTO;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import java.time.YearMonth;
+import java.time.LocalDate;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,9 +19,9 @@ public class ReportController {
 
   private final ReportService reportService;
 
-  @GetMapping("/users/{userid}/expenses/monthly-report")
-  public MonthlyExpenseReportDTO getMonthlyExpenseReport(@PathVariable String userid, Optional<YearMonth> yearMonth) {
-    return reportService.getMonthlyExpenseReport(userid, yearMonth);
+  @GetMapping("/users/{userId}/expenses/monthly-report")
+  public MonthlyReportDTO getMonthlyReport(@PathVariable String userId, Optional<LocalDate> reportMonth) {
+    return reportService.getMonthlyReport(userId, reportMonth);
   }
 
 }

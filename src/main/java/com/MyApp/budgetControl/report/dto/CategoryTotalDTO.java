@@ -1,16 +1,14 @@
-package com.MyApp.budgetControl.report;
+package com.MyApp.budgetControl.report.dto;
 
-import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
+import lombok.Value;
 
-@Entity
 @RequiredArgsConstructor
-@NoArgsConstructor(force = true)
+@Value
 public class CategoryTotalDTO {
+
   @Id
-  private final String categoryId;
   private final String categoryName;
   private final Double total;
 

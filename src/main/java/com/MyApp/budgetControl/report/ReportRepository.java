@@ -1,19 +1,31 @@
 package com.MyApp.budgetControl.report;
 
+import com.MyApp.budgetControl.report.dto.CategoryTotalDTO;
+import com.MyApp.budgetControl.report.dto.MonthlyExpenseReportDTO;
 import java.time.Instant;
 import java.util.List;
 import org.springframework.data.jpa.repository.Query;
 
-public interface ReportRepository {
+interface ReportRepository {
 
-  @Query("SELECT new MonthlyExpenseReportDTO(exp.userId, :start, SUM(exp.expenseCost)) " +
+  @Query("SELECT new com.MyApp.budgetControl.report.dto.MonthlyExpenseReportDTO(" +
+      "exp.userId.userName, SUM(exp.expenseCost)) " +
       "FROM ExpenseEntity exp " +
-      "WHERE exp.userId=:userId AND exp.expenseDate >= :start AND exp.expenseDate < :end")
+      "WHERE exp.userId.userId = ?1 " +
+      "AND exp.expenseDate >= ?2 " +
+      "AND exp.expenseDate < ?3 " +
+      "GROUP BY exp.userId")
   MonthlyExpenseReportDTO getMonthlyTotalSummaryForUser(String userId, Instant start, Instant end);
 
 
-  @Query("SELECT new CategoryTotalDTO(exp.categoryId.categoryId, cat.categoryName, sum(exp.expenseCost)) " +
+  @Query("SELECT new com.MyApp.budgetControl.report.dto.CategoryTotalDTO(" +
+      "cat.categoryName, SUM(exp.expenseCost))" +
       "FROM ExpenseEntity exp " +
-      "JOIN CategoryEntity cat ON exp.categoryId = cat.categoryId WHERE exp.userId=:userId AND exp.expenseDate >= :start AND exp.expenseDate < :end GROUP BY exp.categoryId")
+      "JOIN CategoryEntity cat ON exp.categoryId.categoryId = cat.categoryId " +
+      "WHERE exp.userId.userId = ?1 " +
+      "AND exp.expenseDate >= ?2 " +
+      "AND exp.expenseDate < ?3 " +
+      "GROUP BY cat.categoryName")
   List<CategoryTotalDTO> getMonthlyCategoriesSummaryforUser(String userId, Instant start, Instant end);
+
 }
