@@ -16,10 +16,12 @@ import org.springframework.transaction.annotation.Transactional;
 public class ReportService {
 
   private final ReportRepository repository;
+  private final BoundariesService boundariesService;
 
   public MonthlyReportDTO getMonthlyReport(String userId, Optional<LocalDate> date) {
 
-    MonthBoundariesDates monthBoundaries = new MonthBoundariesDates(date);
+    LocalDate effectiveDate = date.orElse(LocalDate.now());
+    MonthBoundaries monthBoundaries = boundariesService.getMonthBoundaries(effectiveDate);
 
     MonthlyExpenseReportDTO summary =
         repository.getMonthlyTotalSummaryForUser(userId,
@@ -39,4 +41,5 @@ public class ReportService {
     );
 
   }
+
 }

@@ -20,8 +20,8 @@ public class ReportController {
   private final ReportService reportService;
 
   @GetMapping("/users/{userId}/expenses/monthly-report")
-  public MonthlyReportDTO getMonthlyReport(@PathVariable String userId, Optional<LocalDate> reportMonth) {
-    return reportService.getMonthlyReport(userId, reportMonth);
+  public MonthlyReportDTO getMonthlyReport(@PathVariable String userId, Optional<LocalDate> date) {
+    return reportService.getMonthlyReport(userId, date);
   }
 
 }
