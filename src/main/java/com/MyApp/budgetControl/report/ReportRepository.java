@@ -9,14 +9,15 @@ import org.springframework.data.jpa.repository.Query;
 interface ReportRepository {
 
   @Query("SELECT new com.MyApp.budgetControl.report.dto.MonthlyExpenseReportDTO(" +
-      "exp.userId.userName, SUM(exp.expenseCost)) " +
-      "FROM ExpenseEntity exp " +
-      "WHERE exp.userId.userId = ?1 " +
-      "AND exp.expenseDate >= ?2 " +
-      "AND exp.expenseDate < ?3 " +
-      "GROUP BY exp.userId")
+      "usr.userName , COALESCE(SUM(exp.expenseCost), 0)) " +
+      "FROM UserEntity usr " +
+      "LEFT JOIN ExpenseEntity exp " +
+      "   ON  exp.userId.userId = usr.userId " +
+      "   AND exp.expenseDate >= ?2 " +
+      "   AND exp.expenseDate < ?3 " +
+      "WHERE usr.userId = ?1 " +
+      "GROUP BY usr.userId, usr.userName")
   MonthlyExpenseReportDTO getMonthlyTotalSummaryForUser(String userId, Instant start, Instant end);
-
 
   @Query("SELECT new com.MyApp.budgetControl.report.dto.CategoryTotalDTO(" +
       "cat.categoryName, SUM(exp.expenseCost))" +

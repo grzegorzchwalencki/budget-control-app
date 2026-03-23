@@ -12,6 +12,6 @@ public class MonthlyExpenseReportDTO {
 
   @Id
   private final String userName;
-  private final Double monthlyExpensesTotal;
+  private final double monthlyExpensesTotal;
 }
 
