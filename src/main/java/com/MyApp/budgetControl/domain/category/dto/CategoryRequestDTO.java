@@ -3,13 +3,9 @@ package com.MyApp.budgetControl.domain.category.dto;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import lombok.Value;
 
 @Value
-@RequiredArgsConstructor
-@NoArgsConstructor(force = true)
 public class CategoryRequestDTO {
 
   @NotBlank(message = "Category name is mandatory")

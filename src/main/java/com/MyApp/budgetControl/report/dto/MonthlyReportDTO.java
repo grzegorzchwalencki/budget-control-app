@@ -3,10 +3,8 @@ package com.MyApp.budgetControl.report.dto;
 import jakarta.persistence.Id;
 import java.time.Instant;
 import java.util.List;
-import lombok.RequiredArgsConstructor;
 import lombok.Value;
 
-@RequiredArgsConstructor
 @Value
 public class MonthlyReportDTO {
 
