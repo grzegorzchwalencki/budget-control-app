@@ -55,6 +55,7 @@ dependencies {
 	testImplementation "org.junit.jupiter:junit-jupiter:${junitVersion}"
 	testImplementation "org.testcontainers:junit-jupiter:${testcontainersVersion}"
 	testImplementation "org.testcontainers:postgresql:${testcontainersVersion}"
+	testImplementation "io.rest-assured:rest-assured:${restAssuredVersion}"
 
     testImplementation "org.spockframework:spock-core"
     testImplementation "org.spockframework:spock-spring"
@@ -66,8 +67,8 @@ tasks.named("test") {
 
 sourceSets {
 	test.groovy.srcDirs(
-			"src/test/unit",
-			"src/test/functional"
+			"src/test/groovy/unit",
+			"src/test/groovy/functional"
 	)
 }
 
