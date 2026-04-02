@@ -16,12 +16,11 @@ import org.springframework.transaction.annotation.Transactional;
 public class ReportService {
 
   private final ReportRepository repository;
-  private final BoundariesService boundariesService;
 
   public MonthlyReportDTO getMonthlyReport(String userId, Optional<LocalDate> date) {
 
     LocalDate effectiveDate = date.orElse(LocalDate.now());
-    MonthBoundaries monthBoundaries = boundariesService.getMonthBoundaries(effectiveDate);
+    MonthBoundaries monthBoundaries = new MonthBoundaries(effectiveDate);
 
     MonthlyExpenseReportDTO summary =
         repository.getMonthlyTotalSummaryForUser(userId,
@@ -29,7 +28,7 @@ public class ReportService {
             monthBoundaries.getFirstDayOfNextMonth());
 
     List<CategoryTotalDTO> categories =
-        repository.getMonthlyCategoriesSummaryforUser(userId,
+        repository.getMonthlyCategoriesSummaryForUser(userId,
             monthBoundaries.getFirstDayOfMonth(),
             monthBoundaries.getFirstDayOfNextMonth());
 

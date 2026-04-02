@@ -50,7 +50,7 @@ class ServicesOrchestratorTest extends Specification {
         when:
             def result = orchestrator.findAllCategories()
         then:
-            assert result == List.of(categoryDTO)
+            result == List.of(categoryDTO)
     }
 
     def "findCategoryById should get entity from service and map to DTO"() {
@@ -62,9 +62,9 @@ class ServicesOrchestratorTest extends Specification {
             def result = orchestrator.findCategoryById(id)
 
         then:
-            assert result instanceof CategoryResponseDTO
-            assert result.categoryId == id
-            assert result.categoryName == name
+            result instanceof CategoryResponseDTO
+            result.categoryId == id
+            result.categoryName == name
     }
 
     def "saveExpense should call method save on expenseService"() {
@@ -86,7 +86,7 @@ class ServicesOrchestratorTest extends Specification {
         when:
             def result = orchestrator.findAllExpenses()
         then:
-            assert result == List.of(expenseDTO)
+            result == List.of(expenseDTO)
 
     }
 
@@ -99,7 +99,7 @@ class ServicesOrchestratorTest extends Specification {
             def result = orchestrator.findExpenseById(id)
 
         then:
-            assert result instanceof ExpenseResponseDTO
+            result instanceof ExpenseResponseDTO
     }
 
     def "deleteExpenseById should call method deleteExpenseById on expenseService"() {
@@ -125,7 +125,7 @@ class ServicesOrchestratorTest extends Specification {
         when:
             def result = orchestrator.findAllUsers()
         then:
-            assert result == List.of(userDTO)
+            result == List.of(userDTO)
     }
 
     def "findUserById should get entity from service and map to DTO"() {
@@ -138,11 +138,11 @@ class ServicesOrchestratorTest extends Specification {
             def result = orchestrator.findUserById(id)
 
         then:
-            assert result instanceof UserResponseDTO
-            assert result.userId == id
-            assert result.userName == name
-            assert result.userEmail == email
-            assert result.userExpenses == Collections.emptyList()
+            result instanceof UserResponseDTO
+            result.userId == id
+            result.userName == name
+            result.userEmail == email
+            result.userExpenses == Collections.emptyList()
     }
 
     def "deleteUserById should call method deleteUserById on userService"() {

@@ -11,5 +11,5 @@ interface ReportJpaRepository extends ReportRepository, JpaRepository<ExpenseEnt
 
   MonthlyExpenseReportDTO getMonthlyTotalSummaryForUser(String userId, Instant start, Instant end);
 
-  List<CategoryTotalDTO> getMonthlyCategoriesSummaryforUser(String userId, Instant start, Instant end);
+  List<CategoryTotalDTO> getMonthlyCategoriesSummaryForUser(String userId, Instant start, Instant end);
 }

@@ -1,6 +1,7 @@
 package com.MyApp.budgetControl.domain.expense.dto;
 
 import com.MyApp.budgetControl.domain.expense.ExpenseEntity;
+import java.math.BigDecimal;
 import java.time.Instant;
 import lombok.Value;
 
@@ -17,7 +18,7 @@ public class ExpenseResponseDTO {
   }
 
   private final String expenseId;
-  private final double expenseCost;
+  private final BigDecimal expenseCost;
   private final String categoryId;
   private final String expenseComment;
   private final Instant expenseDate;

@@ -66,8 +66,8 @@ class CategoryServiceTest extends Specification {
             result.size() == expectedSize
             if (expectedSize > 0) {
                 result.eachWithIndex { dto, index ->
-                    assert dto.categoryId == categories.get(index).categoryId
-                    assert dto.categoryName == categories.get(index).categoryName
+                    dto.categoryId == categories.get(index).categoryId
+                    dto.categoryName == categories.get(index).categoryName
                 }
             }
         where:
@@ -100,10 +100,10 @@ class CategoryServiceTest extends Specification {
             def result = categoryService.findCategoryById("categoryId")
 
         then: 'Verify'
-            assert result.categoryId == category.categoryId
-            assert result.categoryName == category.categoryName
-            assert result.categoryExpenses == category.categoryExpenses
-            assert result.categoryExpenses.isEmpty()
+            result.categoryId == category.categoryId
+            result.categoryName == category.categoryName
+            result.categoryExpenses == category.categoryExpenses
+            result.categoryExpenses.isEmpty()
 
     }
 

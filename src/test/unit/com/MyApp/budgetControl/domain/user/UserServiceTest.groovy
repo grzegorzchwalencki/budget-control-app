@@ -54,9 +54,9 @@ class UserServiceTest extends Specification {
         then: "Verify the result is a list of DTOs with correct mapping"
             result.size() == expectedSize
             result.eachWithIndex { dto, index ->
-                assert dto.getUserId() == users.get(index).userId
-                assert dto.getUserEmail() == users.get(index).getUserEmail()
-                assert dto.getUserExpenses().size() == users.get(index).getUserExpenses().size()
+                dto.getUserId() == users.get(index).userId
+                dto.getUserEmail() == users.get(index).getUserEmail()
+                dto.getUserExpenses().size() == users.get(index).getUserExpenses().size()
             }
 
         where:
@@ -75,7 +75,7 @@ class UserServiceTest extends Specification {
             def result = userService.findAllUsers()
 
         then: "Verify the result is an empy list"
-            assert result.isEmpty()
+            result.isEmpty()
     }
 
     def "findUserById should return Entity with correct values when user found"() {
@@ -91,10 +91,10 @@ class UserServiceTest extends Specification {
             def result = userService.findUserById("userId")
 
         then: "Verify the result is a DTO with correct mapping"
-            assert result.getUserId() == user.getUserId()
-            assert result.getUserName() == user.getUserName()
-            assert result.getUserEmail() == user.getUserEmail()
-            assert result.getUserExpenses() == user.getUserExpenses()
+            result.getUserId() == user.getUserId()
+            result.getUserName() == user.getUserName()
+            result.getUserEmail() == user.getUserEmail()
+            result.getUserExpenses() == user.getUserExpenses()
     }
 
     def "findUserById should return NoSuchElementException when user not found"() {

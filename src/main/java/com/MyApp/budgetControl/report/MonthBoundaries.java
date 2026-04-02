@@ -4,10 +4,12 @@ import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneOffset;
 import java.time.temporal.TemporalAdjusters;
+import lombok.RequiredArgsConstructor;
 import lombok.Value;
 
 @Value
-public class MonthBoundaries {
+@RequiredArgsConstructor
+class MonthBoundaries {
 
   private final Instant firstDayOfMonth;
   private final Instant firstDayOfNextMonth;
@@ -20,8 +22,4 @@ public class MonthBoundaries {
     this.firstDayOfNextMonth = firstDayOfMonth.plusMonths(1).atStartOfDay(zone).toInstant();
   }
 
-  public MonthBoundaries(Instant firstDayOfMonth, Instant firstDayOfNextMonth) {
-    this.firstDayOfMonth = firstDayOfMonth;
-    this.firstDayOfNextMonth = firstDayOfNextMonth;
-  }
 }

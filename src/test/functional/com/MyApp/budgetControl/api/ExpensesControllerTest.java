@@ -11,6 +11,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.MyApp.budgetControl.domain.expense.dto.ExpenseRequestDTO;
 import com.jayway.jsonpath.JsonPath;
+import java.math.BigDecimal;
 import java.util.UUID;
 import lombok.SneakyThrows;
 import net.datafaker.Faker;
@@ -66,7 +67,7 @@ class ExpensesControllerTest extends TestContainersConfiguration {
     mockMvc.perform(post("/expenses")
         .contentType(MediaType.APPLICATION_JSON)
         .content(objectMapper.writeValueAsString(
-            new ExpenseRequestDTO(123, initCategoryId, comment, initUserId))));
+            new ExpenseRequestDTO(BigDecimal.valueOf(123), initCategoryId, comment, initUserId))));
     initExpenseId = findIdByAttributeValue(comment, "expense");
   }
 
@@ -114,7 +115,7 @@ class ExpensesControllerTest extends TestContainersConfiguration {
     mockMvc.perform(post("/expenses")
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(
-                new ExpenseRequestDTO(123, initCategoryId, newComment, initUserId))))
+                new ExpenseRequestDTO(BigDecimal.valueOf(123), initCategoryId, newComment, initUserId))))
         .andDo(print())
         .andExpect(status().isCreated());
 
@@ -140,7 +141,7 @@ class ExpensesControllerTest extends TestContainersConfiguration {
     mockMvc.perform(post("/expenses")
             .contentType(MediaType.APPLICATION_JSON)
             .content(objectMapper.writeValueAsString(
-                new ExpenseRequestDTO(123, initCategoryId, random_expenseComment, initUserId))))
+                new ExpenseRequestDTO(BigDecimal.valueOf(123), initCategoryId, random_expenseComment, initUserId))))
         .andDo(print())
         .andExpect(status().isCreated());
     mockMvc.perform(get("/expenses"))
@@ -151,7 +152,7 @@ class ExpensesControllerTest extends TestContainersConfiguration {
   @ParameterizedTest
   @CsvFileSource(resources = "/postTestData.csv", numLinesToSkip = 1)
   void postNewExpenseWithInvalidFieldsShouldReturnErrorResponseHandlingMethodArgumentNotValidException(
-      @RequestBody int expenseCost, String expenseComment, String expectedMessage) {
+      @RequestBody BigDecimal expenseCost, String expenseComment, String expectedMessage) {
     ExpenseRequestDTO newExpense = new ExpenseRequestDTO(
         expenseCost,
         initCategoryId,
