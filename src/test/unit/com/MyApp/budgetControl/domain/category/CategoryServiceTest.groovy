@@ -66,8 +66,8 @@ class CategoryServiceTest extends Specification {
             result.size() == expectedSize
             if (expectedSize > 0) {
                 result.eachWithIndex { dto, index ->
-                    dto.categoryId == categories.get(index).categoryId
-                    dto.categoryName == categories.get(index).categoryName
+                    assert dto.categoryId == categories.get(index).categoryId
+                    assert dto.categoryName == categories.get(index).categoryName
                 }
             }
         where:

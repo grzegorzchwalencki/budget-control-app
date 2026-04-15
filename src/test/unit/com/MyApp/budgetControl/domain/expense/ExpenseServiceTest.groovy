@@ -76,12 +76,12 @@ class ExpenseServiceTest extends Specification {
         then: "Verify the result is a list of DTOs with correct mapping"
             result.size() == expectedSize
             result.eachWithIndex { dto, index ->
-                dto.getExpenseId() == expenses.get(index).expenseId
-                dto.getExpenseCost() == expenses.get(index).expenseCost
-                dto.getCategoryId() == expenses.get(index).categoryId.getCategoryId()
-                dto.getExpenseComment() == expenses.get(index).expenseComment
-                dto.getExpenseDate() == expenses.get(index).expenseDate
-                dto.getUserId() == expenses.get(index).userId.getUserId()
+                assert dto.getExpenseId() == expenses.get(index).expenseId
+                assert dto.getExpenseCost() == expenses.get(index).expenseCost
+                assert dto.getCategoryId() == expenses.get(index).categoryId.getCategoryId()
+                assert dto.getExpenseComment() == expenses.get(index).expenseComment
+                assert dto.getExpenseDate() == expenses.get(index).expenseDate
+                assert dto.getUserId() == expenses.get(index).userId.getUserId()
             }
 
         where:

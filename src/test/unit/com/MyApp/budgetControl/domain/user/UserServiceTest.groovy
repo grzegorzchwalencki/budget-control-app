@@ -54,9 +54,9 @@ class UserServiceTest extends Specification {
         then: "Verify the result is a list of DTOs with correct mapping"
             result.size() == expectedSize
             result.eachWithIndex { dto, index ->
-                dto.getUserId() == users.get(index).userId
-                dto.getUserEmail() == users.get(index).getUserEmail()
-                dto.getUserExpenses().size() == users.get(index).getUserExpenses().size()
+                assert dto.getUserId() == users.get(index).userId
+                assert dto.getUserEmail() == users.get(index).getUserEmail()
+                assert dto.getUserExpenses().size() == users.get(index).getUserExpenses().size()
             }
 
         where:

@@ -17,9 +17,9 @@ public class ReportService {
 
   private final ReportRepository repository;
 
-  public MonthlyReportDTO getMonthlyReport(String userId, Optional<LocalDate> date) {
+  public MonthlyReportDTO getMonthlyReport(String userId, LocalDate date) {
 
-    LocalDate effectiveDate = date.orElse(LocalDate.now());
+    LocalDate effectiveDate = Optional.ofNullable(date).orElse(LocalDate.now());
     MonthBoundaries monthBoundaries = new MonthBoundaries(effectiveDate);
 
     MonthlyExpenseReportDTO summary =

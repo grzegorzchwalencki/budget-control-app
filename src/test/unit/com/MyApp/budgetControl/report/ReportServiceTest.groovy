@@ -24,22 +24,22 @@ class ReportServiceTest extends Specification {
             1 * repository.getMonthlyTotalSummaryForUser(_, _, _) >> reportDTO
             1 * repository.getMonthlyCategoriesSummaryForUser(_, _, _) >> categoryListDTO
         when:
-            def result = service.getMonthlyReport("userId", inputDate as Optional<LocalDate>)
+            def result = service.getMonthlyReport("userId", inputDate as LocalDate)
 
         then:
 
             result.userName == "userName"
             result.firstDayOfMonth == firstDayOfExpectedMonth
-            result.monthlyExpensesTotal == 200
+            result.monthlyExpensesTotal == BigDecimal.valueOf(200)
             result.categories == List.of(new CategoryTotalDTO("categoryName", BigDecimal.valueOf(200)))
 
         where:
-            inputDate                               | expectedDate
-            Optional.of(LocalDate.now())            | LocalDate.now()
-            Optional.empty()                        | LocalDate.now()
-            Optional.of(LocalDate.of(2025, 5, 5))   | LocalDate.of(2025, 5, 1)
-            Optional.of(LocalDate.of(2025, 1, 1))   | LocalDate.of(2025, 1, 1)
-            Optional.of(LocalDate.of(2025, 12, 31)) | LocalDate.of(2025, 12, 1)
+            inputDate                  | expectedDate
+            LocalDate.now()            | LocalDate.now()
+            null                       | LocalDate.now()
+            LocalDate.of(2025, 5, 5)   | LocalDate.of(2025, 5, 1)
+            LocalDate.of(2025, 1, 1)   | LocalDate.of(2025, 1, 1)
+            LocalDate.of(2025, 12, 31) | LocalDate.of(2025, 12, 1)
     }
 
 
