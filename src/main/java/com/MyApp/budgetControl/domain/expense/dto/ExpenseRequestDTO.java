@@ -5,19 +5,16 @@ import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
+import java.math.BigDecimal;
 import lombok.Value;
 
 @Value
-@RequiredArgsConstructor
-@NoArgsConstructor(force = true)
 public class ExpenseRequestDTO {
 
   @NotNull(message = "Cost value is mandatory")
   @DecimalMin(value = "0.01", message = "Cost value should be positive")
   @JsonProperty("expenseCost")
-  private final double expenseCost;
+  private final BigDecimal expenseCost;
 
   @NotBlank(message = "Category is mandatory")
   @Size(max = 36)

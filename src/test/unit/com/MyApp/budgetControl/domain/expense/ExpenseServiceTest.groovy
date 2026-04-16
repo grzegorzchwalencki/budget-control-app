@@ -60,7 +60,7 @@ class ExpenseServiceTest extends Specification {
             def expenses = (0..<repoSize).collect {
                 new ExpenseEntity(
                         UUID.randomUUID().toString(),
-                        10,
+                        BigDecimal.valueOf(10),
                         category,
                         "Comment $it",
                         Instant.now(),
@@ -100,14 +100,14 @@ class ExpenseServiceTest extends Specification {
             def result = expenseService.findAllExpenses()
 
         then: "Verify the result is an empy list"
-            assert result.isEmpty()
+            result.isEmpty()
     }
 
     def "findExpenseById should return DTO with correct values when expense found"() {
         given: "create entity"
             def expense = new ExpenseEntity(
                     UUID.randomUUID().toString(),
-                    10,
+                    BigDecimal.valueOf(10),
                     category,
                     "Comment",
                     Instant.now(),
@@ -118,12 +118,12 @@ class ExpenseServiceTest extends Specification {
             def result = expenseService.findExpenseById("expenseId")
 
         then: "Verify the result is a DTO with correct mapping"
-            assert result.getCategoryId() == expense.categoryId.getCategoryId()
-            assert result.getUserId() == expense.userId.getUserId()
-            assert result.getExpenseDate() == expense.getExpenseDate()
-            assert result.getExpenseCost() == expense.getExpenseCost()
-            assert result.getExpenseComment() == expense.getExpenseComment()
-            assert result.getExpenseId() == expense.getExpenseId()
+            result.getCategoryId() == expense.categoryId.getCategoryId()
+            result.getUserId() == expense.userId.getUserId()
+            result.getExpenseDate() == expense.getExpenseDate()
+            result.getExpenseCost() == expense.getExpenseCost()
+            result.getExpenseComment() == expense.getExpenseComment()
+            result.getExpenseId() == expense.getExpenseId()
     }
 
     def "findExpenseById should return NoSuchElementException when expense not found"() {
@@ -141,7 +141,7 @@ class ExpenseServiceTest extends Specification {
         given: "create entity"
             def expense = new ExpenseEntity(
                     UUID.randomUUID().toString(),
-                    10,
+                    BigDecimal.valueOf(10),
                     category,
                     "Comment",
                     Instant.now(),

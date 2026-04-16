@@ -100,10 +100,10 @@ class CategoryServiceTest extends Specification {
             def result = categoryService.findCategoryById("categoryId")
 
         then: 'Verify'
-            assert result.categoryId == category.categoryId
-            assert result.categoryName == category.categoryName
-            assert result.categoryExpenses == category.categoryExpenses
-            assert result.categoryExpenses.isEmpty()
+            result.categoryId == category.categoryId
+            result.categoryName == category.categoryName
+            result.categoryExpenses == category.categoryExpenses
+            result.categoryExpenses.isEmpty()
 
     }
 
