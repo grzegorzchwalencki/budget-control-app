@@ -12,6 +12,7 @@ import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.UUID;
 import lombok.NoArgsConstructor;
@@ -42,7 +43,7 @@ public class ExpenseEntity {
 
   @NotNull(message = "Cost value is mandatory")
   @DecimalMin(value = "0.01", message = "Cost value should be positive")
-  private final double expenseCost;
+  private final BigDecimal expenseCost;
 
   @NotNull(message = "Category is mandatory")
   @ManyToOne
