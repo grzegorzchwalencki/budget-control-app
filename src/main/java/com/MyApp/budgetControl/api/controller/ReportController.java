@@ -2,6 +2,9 @@ package com.MyApp.budgetControl.api.controller;
 
 import com.MyApp.budgetControl.report.ReportService;
 import com.MyApp.budgetControl.report.dto.MonthlyReportDTO;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.time.LocalDate;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +22,9 @@ public class ReportController {
 
   private final ReportService reportService;
 
+  @Operation(summary = "Get a monthly expense report showing the total amount and the amounts spent in each category")
+  @ApiResponses(value = {
+      @ApiResponse(responseCode = "200", description = "Report generated")})
   @GetMapping("/users/{userId}/expenses/monthly-report")
   public MonthlyReportDTO getMonthlyReport(@PathVariable String userId, @RequestParam(required = false) LocalDate date) {
     return reportService.getMonthlyReport(userId, date);

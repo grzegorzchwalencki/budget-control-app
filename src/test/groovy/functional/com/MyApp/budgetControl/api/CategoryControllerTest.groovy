@@ -3,7 +3,7 @@ package com.MyApp.budgetControl.api
 import static io.restassured.RestAssured.get
 import static io.restassured.RestAssured.given
 
-class CategoryControllerTest extends FunctionalTestConfiguration {
+class CategoryControllerTest extends CommonTest {
 
     def "get categories should return list of categories and correct parameters code 200 and app json content type"() {
         given:
@@ -21,7 +21,7 @@ class CategoryControllerTest extends FunctionalTestConfiguration {
                     .containsAll("category 1", "category 2")
     }
 
-    def "save new Category should add it to repository and return status created 201"() {
+    def "save new category should add it to repository and return status created 201"() {
         when:
             given()
                     .contentType("application/json")
@@ -37,7 +37,7 @@ class CategoryControllerTest extends FunctionalTestConfiguration {
 
     }
 
-    def "save new Category with empty categoryName field should return BadRequest with expected errorDetails"() {
+    def "save new category with empty categoryName field should return BadRequest with expected errorDetails"() {
         when:
             def result = given()
                     .contentType("application/json")
@@ -58,7 +58,7 @@ class CategoryControllerTest extends FunctionalTestConfiguration {
             "   "        | 400
     }
 
-    def "save new Category with categoryName grater than maximum field should return BadRequest with expected errorDetails"() {
+    def "save new category with categoryName grater than maximum field should return BadRequest with expected errorDetails"() {
         given:
             def MAX_CATEGORY_NAME_LENGTH = 64
         when:
@@ -74,18 +74,6 @@ class CategoryControllerTest extends FunctionalTestConfiguration {
         then:
             result.get("errorDetails").toString() == "[Category name max length is 64 char]"
 
-    }
-
-    def createCategory(String categoryName) {
-        def payload = [categoryName: categoryName]
-
-        given()
-                .contentType("application/json")
-                .body(payload)
-                .when()
-                .post("/categories")
-                .then()
-                .statusCode(201)
     }
 
 }
