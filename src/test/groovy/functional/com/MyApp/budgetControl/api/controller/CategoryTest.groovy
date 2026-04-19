@@ -1,9 +1,11 @@
-package com.MyApp.budgetControl.api
+package com.MyApp.budgetControl.api.controller
+
+import com.MyApp.budgetControl.api.CommonTest
 
 import static io.restassured.RestAssured.get
 import static io.restassured.RestAssured.given
 
-class CategoryControllerTest extends CommonTest {
+class CategoryTest extends CommonTest {
 
     def "get categories should return list of categories and correct parameters code 200 and app json content type"() {
         given:

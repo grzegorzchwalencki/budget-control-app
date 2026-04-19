@@ -1,11 +1,12 @@
-package com.MyApp.budgetControl.api
+package com.MyApp.budgetControl.api.controller
 
+import com.MyApp.budgetControl.api.CommonTest
 
 import static io.restassured.RestAssured.delete
 import static io.restassured.RestAssured.get
 import static io.restassured.RestAssured.given
 
-class UserControllerTest extends CommonTest {
+class UserTest extends CommonTest {
 
     def "get users should return list of users and correct parameters code 200 and App Json Content Type"() {
         given:
