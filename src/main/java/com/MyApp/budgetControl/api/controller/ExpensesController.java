@@ -14,6 +14,7 @@ import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -55,7 +56,7 @@ public class ExpensesController {
       @ApiResponse(responseCode = "200", description = "Created the expense")})
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
-  public void addNewExpense(
+  public ResponseEntity<ExpenseResponseDTO> addNewExpense(
       @io.swagger.v3.oas.annotations.parameters.RequestBody(
           description = "Expense to create", required = true,
           content = @Content(mediaType = "application/json",
@@ -64,7 +65,11 @@ public class ExpensesController {
                   "{ \"expenseCost\": 0.07, \"expenseCategory\": \"exampleCategory\"," +
                       "\"expenseComment\": \"exampleComment\", \"userId\": \"userIdThatAlreadyExist\" }")))
       @Valid @RequestBody ExpenseRequestDTO newExpense) {
-    servicesOrchestrator.saveExpense(newExpense);
+    ExpenseResponseDTO response = servicesOrchestrator.saveExpense(newExpense);
+
+    return ResponseEntity
+        .status(HttpStatus.CREATED)
+        .body(response);
   }
 
   @Operation(summary = "Delete the expense by its id")

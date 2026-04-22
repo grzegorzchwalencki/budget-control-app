@@ -23,9 +23,8 @@ public class ServicesOrchestrator {
   private final ExpenseService expenseService;
   private final UserService userService;
 
-  // CATEGORY
-  public void saveCategory(CategoryRequestDTO categoryRequestDTO) {
-    categoryService.saveCategory(categoryRequestDTO);
+  public CategoryResponseDTO saveCategory(CategoryRequestDTO categoryRequestDTO) {
+    return new CategoryResponseDTO(categoryService.saveCategory(categoryRequestDTO));
   }
 
   public List<CategoryResponseDTO> findAllCategories() {
@@ -36,12 +35,10 @@ public class ServicesOrchestrator {
     return new CategoryResponseDTO(categoryService.findCategoryById(categoryId));
   }
 
-  // EXPENSE
-
-  public void saveExpense(ExpenseRequestDTO expenseRequestDTO) {
+  public ExpenseResponseDTO saveExpense(ExpenseRequestDTO expenseRequestDTO) {
     CategoryEntity category = categoryService.findCategoryById(expenseRequestDTO.getCategoryId());
     UserEntity user = userService.findUserById(expenseRequestDTO.getUserId());
-    expenseService.saveExpense(expenseRequestDTO, category, user);
+    return new ExpenseResponseDTO(expenseService.saveExpense(expenseRequestDTO, category, user));
   }
 
   public List<ExpenseResponseDTO> findAllExpenses() {
@@ -56,9 +53,8 @@ public class ServicesOrchestrator {
     expenseService.deleteExpenseById(expenseId);
   }
 
-  // USER
-  public void saveUser(UserRequestDTO userRequestDTO) {
-    userService.saveUser(userRequestDTO);
+  public UserResponseDTO saveUser(UserRequestDTO userRequestDTO) {
+    return new UserResponseDTO(userService.saveUser(userRequestDTO));
   }
 
   public List<UserResponseDTO> findAllUsers() {
