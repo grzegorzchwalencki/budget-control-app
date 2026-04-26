@@ -1,56 +1,75 @@
 package com.MyApp.budgetControl.api
 
-import io.restassured.response.Response
+import com.MyApp.budgetControl.api.utils.TestsConstants
+import net.datafaker.Faker
 
 import static io.restassured.RestAssured.given
 
-class CommonTest extends FunctionalTestConfiguration {
+class CommonTest extends TestsConstants {
 
-    def assertErrorMessage(Response response, String expectedError) {
-
-        def expected = switch (expectedError) {
-            case "NOT_FOUND" -> [statusCode: 404, errorDetails: "[Element with given Id does not exist]", errorType: "NOT_FOUND_ERROR"]
-            case "CONFLICT_ERROR" -> [statusCode: 409, errorDetails: "[Name is already used. Please choose a different one]", errorType: "CONFLICT_ERROR"]
-            default -> throw new IllegalArgumentException("Unknown error type: $expectedError")
-        }
-
-        assert response.statusCode() == expected.statusCode
-        assert response.jsonPath().getInt("statusCode") == expected.statusCode
-        assert response.jsonPath().getString("errorDetails").contains(expected.errorDetails)
-        assert response.jsonPath().getString("errorType") == expected.errorType
-        return true
-    }
+    def faker = new Faker()
 
     def createCategory(String categoryName) {
         def payload = [categoryName: categoryName]
-        given()
-                .contentType("application/json")
+        return given()
+                .contentType(CONTENT_TYPE_JSON)
                 .body(payload)
                 .when()
-                .post("/categories")
+                .post(CATEGORIES_PATH)
                 .then()
                 .statusCode(201)
+                .extract().response()
+                .body().jsonPath()
+                .getString("categoryId")
     }
 
     def createUser(String userName) {
         def payload = [userName: userName, userEmail: "%s@mail.com".formatted(userName)]
-        given()
+        return given()
                 .contentType("application/json")
                 .body(payload)
                 .when()
-                .post("/users")
+                .post(USERS_PATH)
                 .then()
                 .statusCode(201)
+                .extract().response()
+                .body().jsonPath()
+                .getString("userId")
+    }
+
+    def createExpense(String categoryId, String userId) {
+        def payload = [expenseCost: EXPENSE_COST, categoryId: categoryId, expenseComment: "Comment prepared expense", userId: userId]
+        return given()
+                .contentType("application/json")
+                .body(payload)
+                .when()
+                .post(EXPENSES_PATH)
+                .then()
+                .statusCode(201)
+                .extract().response()
+                .body().jsonPath()
+                .getString("expenseId")
+
     }
 
     def getUserIdByUserName(String userName) {
         return given()
-                .when().get("/users")
+                .when().get(USERS_PATH)
                 .then()
                 .statusCode(200)
                 .extract()
                 .jsonPath()
                 .get("find {it.userName == '${userName}'}.userId")
+    }
+
+    def getCategoryIdByCategoryName(String categoryName) {
+        return given()
+                .when().get(CATEGORIES_PATH)
+                .then()
+                .statusCode(200)
+                .extract()
+                .jsonPath()
+                .get("find {it.categoryName == '${categoryName}'}.categoryId")
     }
 
 }
