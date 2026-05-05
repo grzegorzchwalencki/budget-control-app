@@ -1,5 +1,6 @@
 package com.MyApp.budgetControl.report
 
+
 import com.MyApp.budgetControl.report.dto.CategoryTotalDTO
 import com.MyApp.budgetControl.report.dto.MonthlyExpenseReportDTO
 import spock.lang.Specification

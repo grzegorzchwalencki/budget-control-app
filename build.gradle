@@ -61,18 +61,8 @@ dependencies {
     testImplementation "org.spockframework:spock-spring"
 }
 
-tasks.named("test") {
+tasks.withType(Test).configureEach {
     useJUnitPlatform()
-}
-
-sourceSets {
-	test.groovy.srcDirs(
-			"src/test/groovy/unit",
-			"src/test/groovy/functional"
-	)
-}
-
-test {
     finalizedBy jacocoTestReport
     testLogging {
         events "passed", "skipped", "failed"
@@ -83,11 +73,35 @@ test {
     }
 }
 
+sourceSets {
+    test.groovy.srcDir 'src/test/unit/groovy'
+    functional {
+        groovy.srcDir 'src/test/functional/groovy'
+        compileClasspath += main.output + test.output
+        runtimeClasspath += main.output + test.output
+    }
+}
+
+configurations {
+    functionalImplementation.extendsFrom testImplementation
+    functionalRuntimeOnly.extendsFrom testRuntime
+}
+
+tasks.register("functionalTest", Test) {
+    description = 'Runs functional tests.'
+    group = 'verification'
+    testClassesDirs = sourceSets.functional.output.classesDirs
+    classpath = sourceSets.functional.runtimeClasspath
+    mustRunAfter(test)
+}
+
+check.dependsOn functionalTest
+
 jacocoTestReport {
-	dependsOn test
-	reports {
-		xml.required = false
-		csv.required = false
-		html.required = true
-	}
+    dependsOn test
+    reports {
+        xml.required = false
+        csv.required = false
+        html.required = true
+    }
 }

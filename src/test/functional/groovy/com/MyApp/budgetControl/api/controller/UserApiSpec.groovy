@@ -2,10 +2,9 @@ package com.MyApp.budgetControl.api.controller
 
 import com.MyApp.budgetControl.api.CommonTest
 import com.MyApp.budgetControl.domain.user.UserRepository
+import io.restassured.RestAssured
 import org.springframework.beans.factory.annotation.Autowired
 
-import static io.restassured.RestAssured.delete
-import static io.restassured.RestAssured.get
 import static io.restassured.RestAssured.given
 
 class UserApiSpec extends CommonTest {
@@ -21,7 +20,7 @@ class UserApiSpec extends CommonTest {
             createUser(userName2)
 
         when:
-            def response = get(USERS_PATH)
+            def response = RestAssured.get(USERS_PATH)
 
         then:
             with(response) {
@@ -38,7 +37,7 @@ class UserApiSpec extends CommonTest {
             def id = getUserIdByUserName(userName)
 
         when:
-            def response = get(USERS_PATH + "/%s".formatted(id))
+            def response = RestAssured.get(USERS_PATH + "/%s".formatted(id))
 
         then:
             response.statusCode() == 200
@@ -46,14 +45,14 @@ class UserApiSpec extends CommonTest {
         and:
             with(response.jsonPath()) {
                 assert getString("userName").contains(userName)
-                assert getString("userId").contains(id)
+                assert getString("userId").contains(id as String)
                 assert getList("userExpenses").isEmpty()
             }
     }
 
     def "get user by Id when not exist should throw not found error"() {
         when:
-            def response = get(USERS_PATH + "/notExistUserId")
+            def response = RestAssured.get(USERS_PATH + "/notExistUserId")
 
         then:
             assertErrorMessage(response, ExpectedErrors.NOT_FOUND)
@@ -116,18 +115,18 @@ class UserApiSpec extends CommonTest {
             def userId = getUserIdByUserName(userName)
 
         when:
-            def deleteResponse = delete(USERS_PATH + "/%s".formatted(userId))
+            def deleteResponse = RestAssured.delete(USERS_PATH + "/%s".formatted(userId))
 
         then:
             deleteResponse.statusCode() == 202
 
         and:
-            !repository.findById(userId).isPresent()
+            !repository.findById(userId as String).isPresent()
     }
 
     def "delete user when not exist should throw not found error"() {
         when:
-            def deleteResponse = delete(USERS_PATH + "/notExistingUserId")
+            def deleteResponse = RestAssured.delete(USERS_PATH + "/notExistingUserId")
 
         then:
             deleteResponse.statusCode() == 404

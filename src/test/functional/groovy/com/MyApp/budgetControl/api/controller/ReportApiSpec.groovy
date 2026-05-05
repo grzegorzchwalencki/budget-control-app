@@ -38,7 +38,8 @@ class ReportApiSpec extends CommonTest {
 
     def "get monthlyReport for user who has no expenses should return report with expected values"() {
         given:
-            def userName = faker.ancient().hero()
+            String userName = faker.ancient().titan()
+            println userName
             def userId = createUser(userName)
 
         when:

@@ -1,5 +1,6 @@
 package com.MyApp.budgetControl.domain
 
+
 import com.MyApp.budgetControl.domain.category.CategoryEntity
 import com.MyApp.budgetControl.domain.category.CategoryService
 import com.MyApp.budgetControl.domain.category.dto.CategoryRequestDTO
