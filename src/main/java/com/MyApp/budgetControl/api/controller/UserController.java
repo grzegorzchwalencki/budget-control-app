@@ -14,6 +14,7 @@ import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -55,14 +56,18 @@ public class UserController {
       @ApiResponse(responseCode = "201", description = "Created the user")})
   @PostMapping
   @ResponseStatus(HttpStatus.CREATED)
-  public void addNewUser(
+  public ResponseEntity<UserResponseDTO> addNewUser(
       @io.swagger.v3.oas.annotations.parameters.RequestBody(
           description = "User to create", required = true,
           content = @Content(mediaType = "application/json",
               schema = @Schema(implementation = UserRequestDTO.class),
               examples = @ExampleObject(value = "{ \"userName\": \"exampleUser\", \"userEmail\": \"example@email.com\" }")))
       @Valid @RequestBody UserRequestDTO newUser) {
-    servicesOrchestrator.saveUser(newUser);
+    UserResponseDTO response = servicesOrchestrator.saveUser(newUser);
+
+    return ResponseEntity
+        .status(HttpStatus.CREATED)
+        .body(response);
   }
 
   @Operation(summary = "Delete the user by its id")

@@ -10,76 +10,98 @@ group = "com.MyApp"
 version = "0.0.1-SNAPSHOT"
 
 java {
-	toolchain {
-		languageVersion = JavaLanguageVersion.of("${javaVersion}")
-	}
+    toolchain {
+        languageVersion = JavaLanguageVersion.of("${javaVersion}")
+    }
 }
 
 configurations {
-	compileOnly {
-		extendsFrom annotationProcessor
-	}
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
 }
 
 repositories {
-	mavenCentral()
+    mavenCentral()
 }
 
 dependencyManagement {
-	imports {
-		mavenBom "org.apache.groovy:groovy-bom:${groovyVersion}"
-		mavenBom "org.spockframework:spock-bom:${spockVersion}"
-	}
+    imports {
+        mavenBom "org.apache.groovy:groovy-bom:${groovyVersion}"
+        mavenBom "org.spockframework:spock-bom:${spockVersion}"
+    }
 }
 
 dependencies {
-	implementation "org.springframework.boot:spring-boot-starter-web"
-	implementation "org.springframework.boot:spring-boot-starter-validation"
-	implementation "org.springframework.boot:spring-boot-starter-data-jpa"
-	implementation "org.postgresql:postgresql:${postgresqlVersion}"
-	implementation "org.flywaydb:flyway-core:${flywayVersion}"
-	implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:${openapiVersion}"
+    implementation "org.springframework.boot:spring-boot-starter-web"
+    implementation "org.springframework.boot:spring-boot-starter-validation"
+    implementation "org.springframework.boot:spring-boot-starter-data-jpa"
+    implementation "org.postgresql:postgresql:${postgresqlVersion}"
+    implementation "org.flywaydb:flyway-core:${flywayVersion}"
+    implementation "org.springdoc:springdoc-openapi-starter-webmvc-ui:${openapiVersion}"
 
-	runtimeOnly "org.flywaydb:flyway-database-postgresql:${flywayVersion}"
-	compileOnly "org.projectlombok:lombok"
-	annotationProcessor "org.projectlombok:lombok"
+    runtimeOnly "org.flywaydb:flyway-database-postgresql:${flywayVersion}"
+    compileOnly "org.projectlombok:lombok"
+    annotationProcessor "org.projectlombok:lombok"
 
-	testRuntimeOnly "org.junit.platform:junit-platform-launcher"
-	testCompileOnly "org.projectlombok:lombok"
-	testAnnotationProcessor "org.projectlombok:lombok"
+    testRuntimeOnly "org.junit.platform:junit-platform-launcher"
+    testCompileOnly "org.projectlombok:lombok"
+    testAnnotationProcessor "org.projectlombok:lombok"
 
-	testImplementation 'org.springframework.boot:spring-boot-starter-webmvc-test'
-	testImplementation "org.springframework.boot:spring-boot-starter-test"
-	testImplementation "com.tngtech.archunit:archunit-junit5:${archunitVersion}"
-	testImplementation "net.datafaker:datafaker:${datafakerVersion}"
-	testImplementation "org.junit.jupiter:junit-jupiter:${junitVersion}"
-	testImplementation "org.testcontainers:junit-jupiter:${testcontainersVersion}"
-	testImplementation "org.testcontainers:postgresql:${testcontainersVersion}"
+    testImplementation 'org.springframework.boot:spring-boot-starter-webmvc-test'
+    testImplementation "org.springframework.boot:spring-boot-starter-test"
+    testImplementation "com.tngtech.archunit:archunit-junit5:${archunitVersion}"
+    testImplementation "net.datafaker:datafaker:${datafakerVersion}"
+    testImplementation "org.junit.jupiter:junit-jupiter:${junitVersion}"
+    testImplementation "org.testcontainers:junit-jupiter:${testcontainersVersion}"
+    testImplementation "org.testcontainers:postgresql:${testcontainersVersion}"
+    testImplementation "io.rest-assured:rest-assured:${restAssuredVersion}"
 
     testImplementation "org.spockframework:spock-core"
     testImplementation "org.spockframework:spock-spring"
 }
 
-tasks.named("test") {
-	useJUnitPlatform()
+tasks.withType(Test).configureEach {
+    useJUnitPlatform()
+    finalizedBy jacocoTestReport
+    testLogging {
+        events "passed", "skipped", "failed"
+        showExceptions true
+        exceptionFormat "full"
+        showCauses true
+        showStackTraces true
+    }
 }
 
 sourceSets {
-	test.groovy.srcDirs(
-			"src/test/unit",
-			"src/test/functional"
-	)
+    test.groovy.srcDir 'src/test/unit/groovy'
+    functional {
+        groovy.srcDir 'src/test/functional/groovy'
+        compileClasspath += main.output + test.output
+        runtimeClasspath += main.output + test.output
+    }
 }
 
-test {
-	finalizedBy jacocoTestReport
+configurations {
+    functionalImplementation.extendsFrom testImplementation
+    functionalRuntimeOnly.extendsFrom testRuntime
 }
+
+tasks.register("functionalTest", Test) {
+    description = 'Runs functional tests.'
+    group = 'verification'
+    testClassesDirs = sourceSets.functional.output.classesDirs
+    classpath = sourceSets.functional.runtimeClasspath
+    mustRunAfter(test)
+}
+
+check.dependsOn functionalTest
 
 jacocoTestReport {
-	dependsOn test
-	reports {
-		xml.required = false
-		csv.required = false
-		html.required = true
-	}
+    dependsOn test
+    reports {
+        xml.required = false
+        csv.required = false
+        html.required = true
+    }
 }

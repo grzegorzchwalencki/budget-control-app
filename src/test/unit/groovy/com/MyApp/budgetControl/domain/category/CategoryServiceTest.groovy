@@ -1,5 +1,6 @@
 package com.MyApp.budgetControl.domain.category
 
+
 import com.MyApp.budgetControl.domain.category.dto.CategoryRequestDTO
 import spock.lang.Specification
 

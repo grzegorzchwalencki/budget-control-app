@@ -1,5 +1,6 @@
 package com.MyApp.budgetControl.domain
 
+
 import com.MyApp.budgetControl.domain.category.CategoryEntity
 import com.MyApp.budgetControl.domain.category.CategoryService
 import com.MyApp.budgetControl.domain.category.dto.CategoryRequestDTO
@@ -14,38 +15,41 @@ import com.MyApp.budgetControl.domain.user.dto.UserRequestDTO
 import com.MyApp.budgetControl.domain.user.dto.UserResponseDTO
 import spock.lang.Specification
 
+import java.time.Instant
+
+import static java.util.Collections.emptyList
+
 class ServicesOrchestratorTest extends Specification {
 
     def categoryService = Mock(CategoryService)
-    def categoryDTO = Mock(CategoryRequestDTO)
-    def categoryEntity = Mock(CategoryEntity)
-
     def expenseService = Mock(ExpenseService)
-    def expenseDTO = Mock(ExpenseRequestDTO)
-    def expenseEntity = Mock(ExpenseEntity)
-
     def userService = Mock(UserService)
-    def userDTO = Mock(UserRequestDTO)
-    def userEntity = Mock(UserEntity)
-
-    def id = "x"
-    def name = "name"
 
     def orchestrator = new ServicesOrchestrator(categoryService, expenseService, userService)
 
+    def id = "123"
+    def name = "testname"
 
-    def "saveCategory should call method save on categoryService"() {
+
+    def "saveCategory should call service and return DTO"() {
         given:
-            categoryService.saveCategory(_) >> categoryEntity
+            def categoryDTO = new CategoryRequestDTO(name)
+
         when:
-            orchestrator.saveCategory(categoryDTO)
+            def result = orchestrator.saveCategory(categoryDTO)
+
         then:
-            1 * categoryService.saveCategory(categoryDTO)
+            1 * categoryService.saveCategory(_ as CategoryRequestDTO) >>
+                    new CategoryEntity(id, name, emptyList())
+
+            result.categoryId == id
+            result.categoryName == name
     }
 
     def "findAllCategories should call method findAllCategories on categoryService"() {
         given:
-            categoryDTO = Mock(CategoryResponseDTO)
+            def categoryDTO = Mock(CategoryResponseDTO)
+
             1 * categoryService.findAllCategories() >> List.of(categoryDTO)
         when:
             def result = orchestrator.findAllCategories()
@@ -55,33 +59,38 @@ class ServicesOrchestratorTest extends Specification {
 
     def "findCategoryById should get entity from service and map to DTO"() {
         given:
-            categoryEntity = new CategoryEntity(id, name, Collections.emptyList())
-            1 * categoryService.findCategoryById(id) >> categoryEntity
+            def categoryEntity = new CategoryEntity(id, name, emptyList())
+            def expectedDTO = new CategoryResponseDTO(categoryEntity)
 
         when:
             def result = orchestrator.findCategoryById(id)
 
         then:
-            result instanceof CategoryResponseDTO
-            result.categoryId == id
-            result.categoryName == name
+            1 * categoryService.findCategoryById(id) >> categoryEntity
+            result == expectedDTO
     }
 
     def "saveExpense should call method save on expenseService"() {
         given:
-            expenseService.saveExpense(_) >> expenseEntity
-            1 * categoryService.findCategoryById(_) >> categoryEntity
-            1 * userService.findUserById(_) >> userEntity
+            def expectedCost = BigDecimal.valueOf(123)
+            def categoryEntity = new CategoryEntity(id, name, emptyList())
+            def userEntity = new UserEntity(id, name, name + "@email.com", emptyList())
+            def expenseEntity = new ExpenseEntity(id, expectedCost, categoryEntity, name, Instant.now(), userEntity)
+            def expectedResponseDTO = new ExpenseResponseDTO(expenseEntity)
+            def requestDTO = new ExpenseRequestDTO(expectedCost, id, name, id)
 
         when:
-            orchestrator.saveExpense(expenseDTO)
+            def response = orchestrator.saveExpense(requestDTO)
         then:
-            1 * expenseService.saveExpense(expenseDTO, categoryEntity, userEntity)
+            1 * categoryService.findCategoryById(_) >> categoryEntity
+            1 * userService.findUserById(_) >> userEntity
+            1 * expenseService.saveExpense(requestDTO, categoryEntity, userEntity) >> expenseEntity
+            response == expectedResponseDTO
     }
 
     def "findAllExpenses should call method findAll on expenseService"() {
         given:
-            expenseDTO = Mock(ExpenseResponseDTO)
+            def expenseDTO = Mock(ExpenseResponseDTO)
             1 * expenseService.findAllExpenses() >> List.of(expenseDTO)
         when:
             def result = orchestrator.findAllExpenses()
@@ -92,14 +101,14 @@ class ServicesOrchestratorTest extends Specification {
 
     def "findExpenseById should call method findAll on expenseService"() {
         given:
-            expenseDTO = Mock(ExpenseResponseDTO)
-            1 * expenseService.findExpenseById(id) >> expenseDTO
+            def expenseDTO = Mock(ExpenseResponseDTO)
 
         when:
             def result = orchestrator.findExpenseById(id)
 
         then:
             result instanceof ExpenseResponseDTO
+            1 * expenseService.findExpenseById(id) >> expenseDTO
     }
 
     def "deleteExpenseById should call method deleteExpenseById on expenseService"() {
@@ -111,16 +120,20 @@ class ServicesOrchestratorTest extends Specification {
 
     def "saveUser should call method save on userService"() {
         given:
-            userService.saveUser(_) >> userEntity
+            def userEmail = name + "@mail.com"
+            def requestDTO = new UserRequestDTO(name, userEmail)
+            def userEntity = new UserEntity(id, name, userEmail, emptyList())
+            def expectedResponseDTO = new UserResponseDTO(userEntity)
         when:
-            orchestrator.saveUser(userDTO)
+            def result = orchestrator.saveUser(requestDTO)
         then:
-            1 * userService.saveUser(userDTO)
+            1 * userService.saveUser(requestDTO) >> userEntity
+            result == expectedResponseDTO
     }
 
     def "findAllUsers should call method findAllUsers on userService"() {
         given:
-            userDTO = Mock(UserResponseDTO)
+            def userDTO = Mock(UserResponseDTO)
             1 * userService.findAllUsers() >> List.of(userDTO)
         when:
             def result = orchestrator.findAllUsers()
@@ -131,7 +144,7 @@ class ServicesOrchestratorTest extends Specification {
     def "findUserById should get entity from service and map to DTO"() {
         given:
             def email = "aa@bb.cc"
-            userEntity = new UserEntity(id, name, email, Collections.emptyList())
+            def userEntity = new UserEntity(id, name, email, emptyList())
             1 * userService.findUserById(id) >> userEntity
 
         when:
@@ -142,7 +155,7 @@ class ServicesOrchestratorTest extends Specification {
             result.userId == id
             result.userName == name
             result.userEmail == email
-            result.userExpenses == Collections.emptyList()
+            result.userExpenses == emptyList()
     }
 
     def "deleteUserById should call method deleteUserById on userService"() {

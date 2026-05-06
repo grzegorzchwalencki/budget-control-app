@@ -15,9 +15,9 @@ public class UserService {
 
   private final UserRepository userRepository;
 
-  public void saveUser(UserRequestDTO userRequestDTO) {
+  public UserEntity saveUser(UserRequestDTO userRequestDTO) {
     UserEntity newUser = new UserEntity(userRequestDTO);
-    userRepository.save(newUser);
+    return userRepository.save(newUser);
   }
 
   public List<UserResponseDTO> findAllUsers() {

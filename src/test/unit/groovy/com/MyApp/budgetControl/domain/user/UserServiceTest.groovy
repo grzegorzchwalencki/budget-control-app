@@ -1,5 +1,6 @@
 package com.MyApp.budgetControl.domain.user
 
+
 import com.MyApp.budgetControl.domain.user.dto.UserRequestDTO
 import spock.lang.Specification
 
