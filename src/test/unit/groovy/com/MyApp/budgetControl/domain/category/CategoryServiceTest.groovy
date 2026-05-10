@@ -1,6 +1,5 @@
 package com.MyApp.budgetControl.domain.category
 
-
 import com.MyApp.budgetControl.domain.category.dto.CategoryRequestDTO
 import spock.lang.Specification
 
@@ -53,9 +52,9 @@ class CategoryServiceTest extends Specification {
         given: 'Mocked repository response'
             def categories = (0..<repoSize).collect {
                 new CategoryEntity(
-                        UUID.randomUUID().toString(),
+                        UUID.randomUUID(),
                         "Category $it",
-                        [] as List
+                        Collections.emptyList()
                 )
             }
             1 * categoryRepository.findAll() >> categories
@@ -91,14 +90,15 @@ class CategoryServiceTest extends Specification {
 
     def "findCAtegoryById should return category"() {
         given: 'Mocked repository response'
+            def catId = UUID.randomUUID()
             def category = new CategoryEntity(
-                    "categoryId",
+                    catId,
                     "categoryName",
                     Collections.emptyList())
             1 * categoryRepository.findById(_) >> Optional.of(category)
 
         when: 'Calling the method'
-            def result = categoryService.findCategoryById("categoryId")
+            def result = categoryService.findCategoryById(catId)
 
         then: 'Verify'
             result.categoryId == category.categoryId
@@ -114,7 +114,7 @@ class CategoryServiceTest extends Specification {
             1 * categoryRepository.findById(_) >> Optional.empty()
 
         when: 'Calling the method'
-            categoryService.findCategoryById("categoryId")
+            categoryService.findCategoryById(UUID.randomUUID())
 
         then: 'Verify'
             thrown(NoSuchElementException)

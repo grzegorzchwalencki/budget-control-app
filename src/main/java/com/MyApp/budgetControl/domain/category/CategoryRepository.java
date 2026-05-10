@@ -2,6 +2,7 @@ package com.MyApp.budgetControl.domain.category;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 interface CategoryRepository {
 
@@ -9,6 +10,6 @@ interface CategoryRepository {
 
   List<CategoryEntity> findAll();
 
-  Optional<CategoryEntity> findById(String categoryId);
+  Optional<CategoryEntity> findById(UUID categoryId);
 
 }

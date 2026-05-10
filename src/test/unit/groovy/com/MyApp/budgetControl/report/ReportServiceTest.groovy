@@ -18,6 +18,7 @@ class ReportServiceTest extends Specification {
 
     def "should return MonthlyReportDTO with expected values depends on input date"() {
         given:
+            def userID = UUID.randomUUID()
             def reportDTO = new MonthlyExpenseReportDTO("userName", BigDecimal.valueOf(200))
             def categoryListDTO = List.of(new CategoryTotalDTO("categoryName", BigDecimal.valueOf(200)))
             def firstDayOfExpectedMonth = LocalDateTime.of(expectedDate, LocalTime.MIN).with(TemporalAdjusters.firstDayOfMonth()).atZone(ZoneOffset.UTC).toInstant()
@@ -25,7 +26,7 @@ class ReportServiceTest extends Specification {
             1 * repository.getMonthlyTotalSummaryForUser(_, _, _) >> reportDTO
             1 * repository.getMonthlyCategoriesSummaryForUser(_, _, _) >> categoryListDTO
         when:
-            def result = service.getMonthlyReport("userId", inputDate as LocalDate)
+            def result = service.getMonthlyReport(userID, inputDate as LocalDate)
 
         then:
 

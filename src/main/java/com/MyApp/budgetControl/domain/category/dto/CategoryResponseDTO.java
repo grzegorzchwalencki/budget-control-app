@@ -1,17 +1,18 @@
 package com.MyApp.budgetControl.domain.category.dto;
 
 import com.MyApp.budgetControl.domain.category.CategoryEntity;
-import lombok.Value;
+import java.util.UUID;
 
-@Value
-public class CategoryResponseDTO {
+public record CategoryResponseDTO(
+    UUID categoryId,
+    String categoryName
+) {
 
-  public CategoryResponseDTO(CategoryEntity categoryEntity) {
-    this.categoryId = categoryEntity.getCategoryId();
-    this.categoryName = categoryEntity.getCategoryName();
+  public CategoryResponseDTO(CategoryEntity entity) {
+    this(
+        entity.getCategoryId(),
+        entity.getCategoryName()
+    );
   }
-
-  private final String categoryId;
-  private final String categoryName;
 
 }

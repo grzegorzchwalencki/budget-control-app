@@ -27,7 +27,7 @@ class ServicesOrchestratorTest extends Specification {
 
     def orchestrator = new ServicesOrchestrator(categoryService, expenseService, userService)
 
-    def id = "123"
+    def id = UUID.randomUUID()
     def name = "testname"
 
 

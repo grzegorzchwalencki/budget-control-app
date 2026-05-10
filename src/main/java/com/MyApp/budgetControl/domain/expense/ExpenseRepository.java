@@ -2,6 +2,7 @@ package com.MyApp.budgetControl.domain.expense;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 interface ExpenseRepository {
 
@@ -9,7 +10,7 @@ interface ExpenseRepository {
 
   List<ExpenseEntity> findAll();
 
-  Optional<ExpenseEntity> findById(String expenseId);
+  Optional<ExpenseEntity> findById(UUID expenseId);
 
-  void deleteById(String expenseId);
+  void deleteById(UUID expenseId);
 }

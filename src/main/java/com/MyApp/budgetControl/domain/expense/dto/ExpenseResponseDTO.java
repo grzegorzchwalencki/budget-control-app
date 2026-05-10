@@ -3,25 +3,26 @@ package com.MyApp.budgetControl.domain.expense.dto;
 import com.MyApp.budgetControl.domain.expense.ExpenseEntity;
 import java.math.BigDecimal;
 import java.time.Instant;
-import lombok.Value;
+import java.util.UUID;
 
-@Value
-public class ExpenseResponseDTO {
+public record ExpenseResponseDTO(
+    UUID expenseId,
+    BigDecimal expenseCost,
+    UUID categoryId,
+    String expenseComment,
+    Instant expenseDate,
+    UUID userId
+) {
 
-  public ExpenseResponseDTO(ExpenseEntity expense) {
-    this.expenseId = expense.getExpenseId();
-    this.expenseCost = expense.getExpenseCost();
-    this.categoryId = expense.getCategoryId().getCategoryId();
-    this.expenseComment = expense.getExpenseComment();
-    this.expenseDate = expense.getExpenseDate();
-    this.userId = expense.getUserId().getUserId();
+  public ExpenseResponseDTO(ExpenseEntity entity) {
+    this(
+        entity.getExpenseId(),
+        entity.getExpenseCost(),
+        entity.getCategoryId().getCategoryId(),
+        entity.getExpenseComment(),
+        entity.getExpenseDate(),
+        entity.getUserId().getUserId()
+    );
   }
-
-  private final String expenseId;
-  private final BigDecimal expenseCost;
-  private final String categoryId;
-  private final String expenseComment;
-  private final Instant expenseDate;
-  private final String userId;
 
 }

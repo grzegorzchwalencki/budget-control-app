@@ -27,22 +27,21 @@ import org.hibernate.type.SqlTypes;
 public class CategoryEntity {
 
   CategoryEntity(CategoryRequestDTO categoryRequestDTO) {
-    this.categoryId = UUID.randomUUID().toString();
-    this.categoryName = categoryRequestDTO.getCategoryName();
+    this.categoryId = UUID.randomUUID();
+    this.categoryName = categoryRequestDTO.categoryName();
     this.categoryExpenses = Collections.emptyList();
   }
 
   @Id
-  private final String categoryId;
+  UUID categoryId;
 
   @NotBlank(message = "Category name is mandatory")
   @Size(max = 64, message = "Category name max length is 64 char")
   @Column(unique = true)
-  private final String categoryName;
+  String categoryName;
 
   @OneToMany(mappedBy = "categoryId")
   @JdbcTypeCode(SqlTypes.JSON)
-  private List<ExpenseEntity> categoryExpenses;
-
+  List<ExpenseEntity> categoryExpenses;
 
 }

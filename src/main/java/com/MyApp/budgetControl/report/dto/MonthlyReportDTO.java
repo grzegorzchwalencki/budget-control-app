@@ -4,16 +4,12 @@ import jakarta.persistence.Id;
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.List;
-import lombok.Value;
 
-@Value
-public class MonthlyReportDTO {
+public record MonthlyReportDTO(
 
-  @Id
-  private final String userName;
-  private final Instant firstDayOfMonth;
-  private final BigDecimal monthlyExpensesTotal;
-  private final List<CategoryTotalDTO> categories;
-
-
+    @Id
+    String userName,
+    Instant firstDayOfMonth,
+    BigDecimal monthlyExpensesTotal,
+    List<CategoryTotalDTO> categories) {
 }

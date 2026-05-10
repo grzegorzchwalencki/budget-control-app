@@ -30,34 +30,34 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 public class ExpenseEntity {
 
   ExpenseEntity(ExpenseRequestDTO expenseRequestDTO, CategoryEntity categoryId, UserEntity userId) {
-    this.expenseId = UUID.randomUUID().toString();
-    this.expenseCost = expenseRequestDTO.getExpenseCost();
+    this.expenseId = UUID.randomUUID();
+    this.expenseCost = expenseRequestDTO.expenseCost();
     this.categoryId = categoryId;
-    this.expenseComment = expenseRequestDTO.getExpenseComment();
+    this.expenseComment = expenseRequestDTO.expenseComment();
     this.expenseDate = Instant.now();
     this.userId = userId;
   }
 
   @Id
-  private final String expenseId;
+  UUID expenseId;
 
   @NotNull(message = "Cost value is mandatory")
   @DecimalMin(value = "0.01", message = "Cost value should be positive")
-  private final BigDecimal expenseCost;
+  BigDecimal expenseCost;
 
   @NotNull(message = "Category is mandatory")
   @ManyToOne
-  private final CategoryEntity categoryId;
+  CategoryEntity categoryId;
 
   @NotBlank(message = "Comment is mandatory")
   @Size(max = 128, message = "Comment max length is 128 char")
-  private final String expenseComment;
+  String expenseComment;
 
   @NotNull
-  private final Instant expenseDate;
+  Instant expenseDate;
 
   @NotNull(message = "User id is mandatory")
   @ManyToOne
-  private final UserEntity userId;
+  UserEntity userId;
 
 }

@@ -12,9 +12,9 @@ import static io.restassured.RestAssured.given
 class ExpenseApiSpec extends CommonTest {
 
     @Shared
-    String categoryId
+    UUID categoryId
     @Shared
-    String userId
+    UUID userId
 
     def categoryName = faker.name().femaleFirstName()
     def userName = faker.name().firstName()
@@ -41,7 +41,7 @@ class ExpenseApiSpec extends CommonTest {
 
         and:
             response.jsonPath()
-                    .getList("expenseId").containsAll(expenseId1, expenseId2)
+                    .getList("expenseId").containsAll(expenseId1 as String, expenseId2 as String)
 
     }
 
@@ -57,15 +57,15 @@ class ExpenseApiSpec extends CommonTest {
 
         and:
             with(response.jsonPath()) {
-                assert getString("expenseId") == expenseId
-                assert getString("userId") == userId
-                assert getString("categoryId") == categoryId
+                assert getString("expenseId") == expenseId.toString()
+                assert getString("userId") == userId.toString()
+                assert getString("categoryId") == categoryId.toString()
             }
     }
 
     def "get expense by Id when not exist should throw not found error"() {
         when:
-            def response = get(EXPENSES_PATH + "/notExistUserId")
+            def response = get(EXPENSES_PATH + "/" + UUID.randomUUID().toString())
 
         then:
             assertErrorMessage(response, ExpectedErrors.NOT_FOUND)
@@ -75,8 +75,8 @@ class ExpenseApiSpec extends CommonTest {
         given:
             def expenseComment = "testComment"
             def payload = [expenseCost   : 777,
-                           categoryId    : categoryId,
-                           userId        : userId,
+                           categoryId      : categoryId,
+                           userId          : userId,
                            expenseComment: expenseComment]
 
         when:
@@ -86,7 +86,7 @@ class ExpenseApiSpec extends CommonTest {
                     .post(EXPENSES_PATH)
 
             def body = response.jsonPath()
-            def id = body.getString("expenseId")
+            def id = body.getUUID("expenseId")
 
         then:
             response.statusCode() == 201
@@ -95,8 +95,8 @@ class ExpenseApiSpec extends CommonTest {
             with(body) {
                 getString("expenseId") != null
                 getInt("expenseCost") == 777
-                getString("userId") == userId
-                getString("categoryId") == categoryId
+                getString("userId") == userId.toString()
+                getString("categoryId") == categoryId.toString()
                 getString("expenseComment") == expenseComment
             }
 
@@ -181,7 +181,7 @@ class ExpenseApiSpec extends CommonTest {
 
     def "delete expense when not exist should throw not found error"() {
         when:
-            def deleteResponse = delete(EXPENSES_PATH + "/notExistingUserId")
+            def deleteResponse = delete(EXPENSES_PATH + "/" + UUID.randomUUID().toString())
 
         then:
             deleteResponse.statusCode() == 404

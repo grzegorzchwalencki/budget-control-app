@@ -40,7 +40,7 @@ class UserServiceTest extends Specification {
         given: "create list of entities"
             def users = (0..<repoSize).collect {
                 new UserEntity(
-                        UUID.randomUUID().toString(),
+                        UUID.randomUUID(),
                         "User $it",
                         "user@$it" + ".com",
                         Collections.emptyList()
@@ -55,9 +55,9 @@ class UserServiceTest extends Specification {
         then: "Verify the result is a list of DTOs with correct mapping"
             result.size() == expectedSize
             result.eachWithIndex { dto, index ->
-                assert dto.getUserId() == users.get(index).userId
-                assert dto.getUserEmail() == users.get(index).getUserEmail()
-                assert dto.getUserExpenses().size() == users.get(index).getUserExpenses().size()
+                assert dto.userId == users.get(index).getUserId()
+                assert dto.userEmail == users.get(index).getUserEmail()
+                assert dto.userExpenses.size() == users.get(index).getUserExpenses().size()
             }
 
         where:
@@ -81,15 +81,16 @@ class UserServiceTest extends Specification {
 
     def "findUserById should return Entity with correct values when user found"() {
         given: "create entity"
+            def userId = UUID.randomUUID()
             def user = new UserEntity(
-                    UUID.randomUUID().toString(),
+                    userId,
                     "userName",
                     "user@emial.com",
                     Collections.emptyList())
             1 * userRepository.findById(_) >> Optional.of(user)
 
         when: "call the method"
-            def result = userService.findUserById("userId")
+            def result = userService.findUserById(userId)
 
         then: "Verify the result is a DTO with correct mapping"
             result.getUserId() == user.getUserId()
@@ -103,7 +104,7 @@ class UserServiceTest extends Specification {
             1 * userRepository.findById(_) >> Optional.empty()
 
         when: "call the method"
-            userService.findUserById("userId")
+            userService.findUserById(UUID.randomUUID())
 
         then: "Expect NoSuchElementException"
             thrown(NoSuchElementException)
@@ -111,15 +112,16 @@ class UserServiceTest extends Specification {
 
     def "deleteUserById should deleteById method on repository when user exist"() {
         given: "create entity"
+            def userId = UUID.randomUUID()
             def user = new UserEntity(
-                    UUID.randomUUID().toString(),
+                    userId,
                     "userName",
                     "user@emial.com",
                     Collections.emptyList())
             1 * userRepository.findById(_) >> Optional.of(user)
 
         when: "call the method"
-            userService.deleteUserById("userId")
+            userService.deleteUserById(userId)
 
         then: "Expect repository interaction"
             1 * userRepository.deleteById(_)
@@ -130,7 +132,7 @@ class UserServiceTest extends Specification {
             1 * userRepository.findById(_) >> Optional.empty()
 
         when: "call the method"
-            userService.deleteUserById("userId")
+            userService.deleteUserById(UUID.randomUUID())
 
         then: "Expect NoSuchElementException"
             thrown(NoSuchElementException)

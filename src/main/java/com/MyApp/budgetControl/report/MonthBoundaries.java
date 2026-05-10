@@ -11,8 +11,8 @@ import lombok.Value;
 @RequiredArgsConstructor
 class MonthBoundaries {
 
-  private final Instant firstDayOfMonth;
-  private final Instant firstDayOfNextMonth;
+  Instant firstDayOfMonth;
+  Instant firstDayOfNextMonth;
 
   public MonthBoundaries(LocalDate date) {
     ZoneOffset zone = ZoneOffset.UTC;
