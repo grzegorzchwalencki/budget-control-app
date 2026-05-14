@@ -4,6 +4,7 @@ import com.MyApp.budgetControl.report.dto.CategoryTotalDTO;
 import com.MyApp.budgetControl.report.dto.MonthlyExpenseReportDTO;
 import java.time.Instant;
 import java.util.List;
+import java.util.UUID;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
@@ -19,7 +20,7 @@ interface ReportRepository {
       "WHERE usr.userId = :userId " +
       "GROUP BY usr.userId, usr.userName")
   MonthlyExpenseReportDTO getMonthlyTotalSummaryForUser(
-      @Param("userId") String userId,
+      @Param("userId") UUID userId,
       @Param("start") Instant start,
       @Param("end") Instant end);
 
@@ -31,6 +32,6 @@ interface ReportRepository {
       "AND exp.expenseDate >= :start " +
       "AND exp.expenseDate < :end " +
       "GROUP BY cat.categoryName")
-  List<CategoryTotalDTO> getMonthlyCategoriesSummaryForUser(String userId, Instant start, Instant end);
+  List<CategoryTotalDTO> getMonthlyCategoriesSummaryForUser(UUID userId, Instant start, Instant end);
 
 }

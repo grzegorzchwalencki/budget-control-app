@@ -14,6 +14,7 @@ import jakarta.validation.constraints.Size;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
+import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
@@ -23,34 +24,34 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Value
 @Entity
+@Table(name = "users")
 @RequiredArgsConstructor
-@Table(name = "app_user")
-@NoArgsConstructor(force = true)
+@NoArgsConstructor(access = AccessLevel.PROTECTED, force = true)
 @EntityListeners(AuditingEntityListener.class)
 public class UserEntity {
 
   UserEntity(UserRequestDTO userRequestDTO) {
-    this.userId = UUID.randomUUID().toString();
-    this.userName = userRequestDTO.getUserName();
-    this.userEmail = userRequestDTO.getUserEmail();
+    this.userId = UUID.randomUUID();
+    this.userName = userRequestDTO.userName();
+    this.userEmail = userRequestDTO.userEmail();
     this.userExpenses = Collections.emptyList();
   }
 
   @Id
-  private final String userId;
+  UUID userId;
 
   @NotBlank(message = "Username is mandatory")
   @Size(max = 64, message = "Username max length is 64 char")
   @Column(unique = true)
-  private final String userName;
+  String userName;
 
   @Email
   @NotBlank(message = "Email address is mandatory")
   @Size(max = 64, message = "Email address max length is 64 char")
-  private final String userEmail;
+  String userEmail;
 
   @OneToMany(mappedBy = "userId")
   @JdbcTypeCode(SqlTypes.JSON)
-  private List<ExpenseEntity> userExpenses;
+  List<ExpenseEntity> userExpenses;
 
 }

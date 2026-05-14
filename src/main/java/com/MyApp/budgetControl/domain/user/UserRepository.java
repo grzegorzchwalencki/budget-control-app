@@ -2,6 +2,7 @@ package com.MyApp.budgetControl.domain.user;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 interface UserRepository {
 
@@ -9,8 +10,8 @@ interface UserRepository {
 
   List<UserEntity> findAll();
 
-  Optional<UserEntity> findById(String userId);
+  Optional<UserEntity> findById(UUID userId);
 
-  void deleteById(String userId);
+  void deleteById(UUID userId);
 
 }

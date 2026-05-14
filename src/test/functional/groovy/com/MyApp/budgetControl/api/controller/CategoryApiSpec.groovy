@@ -40,7 +40,7 @@ class CategoryApiSpec extends CommonTest {
                     .post(CATEGORIES_PATH)
 
             def body = response.jsonPath()
-            def id = body.getString("categoryId")
+            def id = body.getUUID("categoryId")
 
         then:
             response.statusCode() == 201

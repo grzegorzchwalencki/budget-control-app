@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.util.List;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -47,7 +48,7 @@ public class UserController {
       @ApiResponse(responseCode = "400", description = "Invalid id supplied"),
       @ApiResponse(responseCode = "404", description = "User not found")})
   @GetMapping("/{userId}")
-  public UserResponseDTO getUserById(@PathVariable String userId) {
+  public UserResponseDTO getUserById(@PathVariable UUID userId) {
     return servicesOrchestrator.findUserById(userId);
   }
 
@@ -77,7 +78,7 @@ public class UserController {
       @ApiResponse(responseCode = "404", description = "User not found")})
   @DeleteMapping("/{userId}")
   @ResponseStatus(HttpStatus.ACCEPTED)
-  public void deleteUser(@PathVariable String userId) {
+  public void deleteUser(@PathVariable UUID userId) {
     servicesOrchestrator.deleteUserById(userId);
   }
 

@@ -7,6 +7,7 @@ import com.MyApp.budgetControl.domain.user.UserEntity;
 import jakarta.transaction.Transactional;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -29,12 +30,12 @@ public class ExpenseService {
     return expenseRepository.findAll().stream().map(ExpenseResponseDTO::new).toList();
   }
 
-  public ExpenseResponseDTO findExpenseById(String expenseId) {
+  public ExpenseResponseDTO findExpenseById(UUID expenseId) {
     return new ExpenseResponseDTO(expenseRepository.findById(expenseId).get());
   }
 
   @Transactional
-  public void deleteExpenseById(String expenseId) {
+  public void deleteExpenseById(UUID expenseId) {
     expenseRepository.findById(expenseId)
         .orElseThrow(() -> new NoSuchElementException("Expense with id " + expenseId + " not found"));
     expenseRepository.deleteById(expenseId);

@@ -6,29 +6,24 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.math.BigDecimal;
-import lombok.Value;
+import java.util.UUID;
 
-@Value
-public class ExpenseRequestDTO {
+public record ExpenseRequestDTO(
+    @NotNull(message = "Cost value is mandatory")
+    @DecimalMin(value = "0.01", message = "Cost value should be positive")
+    @JsonProperty("expenseCost")
+    BigDecimal expenseCost,
 
-  @NotNull(message = "Cost value is mandatory")
-  @DecimalMin(value = "0.01", message = "Cost value should be positive")
-  @JsonProperty("expenseCost")
-  private final BigDecimal expenseCost;
+    @NotNull(message = "Category is mandatory")
+    @JsonProperty("categoryId")
+    UUID categoryId,
 
-  @NotBlank(message = "Category is mandatory")
-  @Size(max = 36)
-  @JsonProperty("categoryId")
-  private final String categoryId;
+    @NotBlank(message = "Comment is mandatory")
+    @Size(max = 128, message = "Comment max length is 128 char")
+    @JsonProperty("expenseComment")
+    String expenseComment,
 
-  @NotBlank(message = "Comment is mandatory")
-  @Size(max = 128, message = "Comment max length is 128 char")
-  @JsonProperty("expenseComment")
-  private final String expenseComment;
-
-  @NotBlank(message = "User id is mandatory")
-  @Size(max = 36)
-  @JsonProperty("userId")
-  private final String userId;
-
+    @NotNull(message = "User id is mandatory")
+    @JsonProperty("userId")
+    UUID userId) {
 }

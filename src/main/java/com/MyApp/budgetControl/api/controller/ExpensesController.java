@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import java.util.List;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -47,7 +48,7 @@ public class ExpensesController {
       @ApiResponse(responseCode = "400", description = "Invalid id supplied"),
       @ApiResponse(responseCode = "404", description = "Expense not found")})
   @GetMapping("/{expenseId}")
-  public ExpenseResponseDTO getExpenseById(@PathVariable String expenseId) {
+  public ExpenseResponseDTO getExpenseById(@PathVariable UUID expenseId) {
     return servicesOrchestrator.findExpenseById(expenseId);
   }
 
@@ -79,7 +80,7 @@ public class ExpensesController {
       @ApiResponse(responseCode = "404", description = "Expense not found")})
   @DeleteMapping("/{expenseId}")
   @ResponseStatus(HttpStatus.ACCEPTED)
-  public void deleteExpense(@PathVariable String expenseId) {
+  public void deleteExpense(@PathVariable UUID expenseId) {
     servicesOrchestrator.deleteExpenseById(expenseId);
   }
 }

@@ -20,7 +20,7 @@ class CommonTest extends TestsConstants {
                 .statusCode(201)
                 .extract().response()
                 .body().jsonPath()
-                .getString("categoryId")
+                .getUUID("categoryId")
     }
 
     def createUser(String userName) {
@@ -34,10 +34,10 @@ class CommonTest extends TestsConstants {
                 .statusCode(201)
                 .extract().response()
                 .body().jsonPath()
-                .getString("userId")
+                .getUUID("userId")
     }
 
-    def createExpense(String categoryId, String userId) {
+    def createExpense(UUID categoryId, UUID userId) {
         def payload = [expenseCost: EXPENSE_COST, categoryId: categoryId, expenseComment: "Comment prepared expense", userId: userId]
         return given()
                 .contentType("application/json")
@@ -48,7 +48,7 @@ class CommonTest extends TestsConstants {
                 .statusCode(201)
                 .extract().response()
                 .body().jsonPath()
-                .getString("expenseId")
+                .getUUID("expenseId")
 
     }
 

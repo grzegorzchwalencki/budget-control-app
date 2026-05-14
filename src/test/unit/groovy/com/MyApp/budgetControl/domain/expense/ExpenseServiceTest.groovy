@@ -12,9 +12,11 @@ class ExpenseServiceTest extends Specification {
     def expenseRepository = Mock(ExpenseRepository)
     def expenseService = new ExpenseService(expenseRepository)
 
-    def category = new CategoryEntity("categoryId", "testCategory", new ArrayList<>())
-    def user = new UserEntity("userId", "userName", "user@email.com", new ArrayList<>())
-    def dto = new ExpenseRequestDTO(99.00, "categoryId", "expense comment", "userId")
+    def catID = UUID.randomUUID()
+    def usrID = UUID.randomUUID()
+    def category = new CategoryEntity(catID, "testCategory", new ArrayList<>())
+    def user = new UserEntity(usrID, "userName", "userId@email.com", new ArrayList<>())
+    def dto = new ExpenseRequestDTO(99.00, catID, "expense comment", usrID)
 
     def "saveExpense - call save method on repository, update relationships and return expected entity"() {
         given: "create entities and dto"
@@ -59,7 +61,7 @@ class ExpenseServiceTest extends Specification {
         given: "create list of entities"
             def expenses = (0..<repoSize).collect {
                 new ExpenseEntity(
-                        UUID.randomUUID().toString(),
+                        UUID.randomUUID(),
                         BigDecimal.valueOf(10),
                         category,
                         "Comment $it",
@@ -76,12 +78,12 @@ class ExpenseServiceTest extends Specification {
         then: "Verify the result is a list of DTOs with correct mapping"
             result.size() == expectedSize
             result.eachWithIndex { dto, index ->
-                assert dto.getExpenseId() == expenses.get(index).expenseId
-                assert dto.getExpenseCost() == expenses.get(index).expenseCost
-                assert dto.getCategoryId() == expenses.get(index).categoryId.getCategoryId()
-                assert dto.getExpenseComment() == expenses.get(index).expenseComment
-                assert dto.getExpenseDate() == expenses.get(index).expenseDate
-                assert dto.getUserId() == expenses.get(index).userId.getUserId()
+                assert dto.expenseId == expenses.get(index).expenseId
+                assert dto.expenseCost== expenses.get(index).expenseCost
+                assert dto.categoryId == expenses.get(index).categoryId.getCategoryId()
+                assert dto.expenseComment == expenses.get(index).expenseComment
+                assert dto.expenseDate == expenses.get(index).expenseDate
+                assert dto.userId == expenses.get(index).userId.getUserId()
             }
 
         where:
@@ -105,8 +107,9 @@ class ExpenseServiceTest extends Specification {
 
     def "findExpenseById should return DTO with correct values when expense found"() {
         given: "create entity"
+            def expenseId = UUID.randomUUID()
             def expense = new ExpenseEntity(
-                    UUID.randomUUID().toString(),
+                    expenseId,
                     BigDecimal.valueOf(10),
                     category,
                     "Comment",
@@ -115,15 +118,15 @@ class ExpenseServiceTest extends Specification {
             1 * expenseRepository.findById(_) >> Optional.of(expense)
 
         when: "call the method"
-            def result = expenseService.findExpenseById("expenseId")
+            def result = expenseService.findExpenseById(expenseId)
 
         then: "Verify the result is a DTO with correct mapping"
-            result.getCategoryId() == expense.categoryId.getCategoryId()
-            result.getUserId() == expense.userId.getUserId()
-            result.getExpenseDate() == expense.getExpenseDate()
-            result.getExpenseCost() == expense.getExpenseCost()
-            result.getExpenseComment() == expense.getExpenseComment()
-            result.getExpenseId() == expense.getExpenseId()
+            result.categoryId == expense.categoryId.getCategoryId()
+            result.userId == expense.userId.getUserId()
+            result.expenseDate == expense.getExpenseDate()
+            result.expenseCost == expense.getExpenseCost()
+            result.expenseComment == expense.getExpenseComment()
+            result.expenseId == expense.getExpenseId()
     }
 
     def "findExpenseById should return NoSuchElementException when expense not found"() {
@@ -131,7 +134,7 @@ class ExpenseServiceTest extends Specification {
             1 * expenseRepository.findById(_) >> Optional.empty()
 
         when: "call the method"
-            expenseService.findExpenseById("expenseId")
+            expenseService.findExpenseById(UUID.randomUUID())
 
         then: "Expect NoSuchElementException"
             thrown(NoSuchElementException)
@@ -139,8 +142,9 @@ class ExpenseServiceTest extends Specification {
 
     def "deleteExpenseById should deleteById method on repository when expense exist"() {
         given: "create entity"
+            def expenseId = UUID.randomUUID()
             def expense = new ExpenseEntity(
-                    UUID.randomUUID().toString(),
+                    expenseId,
                     BigDecimal.valueOf(10),
                     category,
                     "Comment",
@@ -149,7 +153,7 @@ class ExpenseServiceTest extends Specification {
             1 * expenseRepository.findById(_) >> Optional.of(expense)
 
         when: "call the method"
-            expenseService.deleteExpenseById("expenseId")
+            expenseService.deleteExpenseById(expenseId)
 
         then: "Expect repository interaction"
             1 * expenseRepository.deleteById(_)
@@ -160,7 +164,7 @@ class ExpenseServiceTest extends Specification {
             1 * expenseRepository.findById(_) >> Optional.empty()
 
         when: "call the method"
-            expenseService.deleteExpenseById("expenseId")
+            expenseService.deleteExpenseById(UUID.randomUUID())
 
         then: "Expect NoSuchElementException"
             thrown(NoSuchElementException)

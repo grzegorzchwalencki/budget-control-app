@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import java.time.LocalDate;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,11 +23,11 @@ public class ReportController {
 
   private final ReportService reportService;
 
-  @Operation(summary = "Get a monthly expense report showing the total amount and the amounts spent in each category")
+  @Operation(summary = "Get a monthly expense report showing the total amount and the amounts spent in each categoryId")
   @ApiResponses(value = {
       @ApiResponse(responseCode = "200", description = "Report generated")})
   @GetMapping("/users/{userId}/expenses/monthly-report")
-  public MonthlyReportDTO getMonthlyReport(@PathVariable String userId, @RequestParam(required = false) LocalDate date) {
+  public MonthlyReportDTO getMonthlyReport(@PathVariable UUID userId, @RequestParam(required = false) LocalDate date) {
     return reportService.getMonthlyReport(userId, date);
   }
 

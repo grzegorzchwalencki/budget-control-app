@@ -4,6 +4,7 @@ import com.MyApp.budgetControl.domain.category.CategoryEntity;
 import com.MyApp.budgetControl.domain.category.CategoryService;
 import com.MyApp.budgetControl.domain.category.dto.CategoryRequestDTO;
 import com.MyApp.budgetControl.domain.category.dto.CategoryResponseDTO;
+import com.MyApp.budgetControl.domain.expense.ExpenseEntity;
 import com.MyApp.budgetControl.domain.expense.ExpenseService;
 import com.MyApp.budgetControl.domain.expense.dto.ExpenseRequestDTO;
 import com.MyApp.budgetControl.domain.expense.dto.ExpenseResponseDTO;
@@ -12,6 +13,7 @@ import com.MyApp.budgetControl.domain.user.UserService;
 import com.MyApp.budgetControl.domain.user.dto.UserRequestDTO;
 import com.MyApp.budgetControl.domain.user.dto.UserResponseDTO;
 import java.util.List;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -31,25 +33,28 @@ public class ServicesOrchestrator {
     return categoryService.findAllCategories();
   }
 
-  public CategoryResponseDTO findCategoryById(String categoryId) {
+  public CategoryResponseDTO findCategoryById(UUID categoryId) {
     return new CategoryResponseDTO(categoryService.findCategoryById(categoryId));
   }
 
   public ExpenseResponseDTO saveExpense(ExpenseRequestDTO expenseRequestDTO) {
-    CategoryEntity category = categoryService.findCategoryById(expenseRequestDTO.getCategoryId());
-    UserEntity user = userService.findUserById(expenseRequestDTO.getUserId());
-    return new ExpenseResponseDTO(expenseService.saveExpense(expenseRequestDTO, category, user));
+    CategoryEntity category = categoryService.findCategoryById(expenseRequestDTO.categoryId());
+    UserEntity user = userService.findUserById(expenseRequestDTO.userId());
+    ExpenseEntity savedExpense = expenseService.saveExpense(expenseRequestDTO, category, user);
+
+    return new ExpenseResponseDTO(savedExpense);
   }
+
 
   public List<ExpenseResponseDTO> findAllExpenses() {
     return expenseService.findAllExpenses();
   }
 
-  public ExpenseResponseDTO findExpenseById(String expenseId) {
+  public ExpenseResponseDTO findExpenseById(UUID expenseId) {
     return expenseService.findExpenseById(expenseId);
   }
 
-  public void deleteExpenseById(String expenseId) {
+  public void deleteExpenseById(UUID expenseId) {
     expenseService.deleteExpenseById(expenseId);
   }
 
@@ -61,11 +66,11 @@ public class ServicesOrchestrator {
     return userService.findAllUsers();
   }
 
-  public UserResponseDTO findUserById(String userId) {
+  public UserResponseDTO findUserById(UUID userId) {
     return new UserResponseDTO(userService.findUserById(userId));
   }
 
-  public void deleteUserById(String userId) {
+  public void deleteUserById(UUID userId) {
     userService.deleteUserById(userId);
   }
 

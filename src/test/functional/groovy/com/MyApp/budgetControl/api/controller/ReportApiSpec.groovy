@@ -20,7 +20,7 @@ class ReportApiSpec extends CommonTest {
             def expectedTotal = (EXPENSE_COST * 2).toString()
 
         when:
-            def response = get("/reports/users/%s/expenses/monthly-report".formatted(userId))
+            def response = get("/reports/users/%s/expenses/monthly-report".formatted(userId.toString()))
             def body = response.jsonPath()
 
         then:

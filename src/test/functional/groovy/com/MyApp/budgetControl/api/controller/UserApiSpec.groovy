@@ -52,7 +52,7 @@ class UserApiSpec extends CommonTest {
 
     def "get user by Id when not exist should throw not found error"() {
         when:
-            def response = RestAssured.get(USERS_PATH + "/notExistUserId")
+            def response = RestAssured.get(USERS_PATH + "/" + UUID.randomUUID().toString())
 
         then:
             assertErrorMessage(response, ExpectedErrors.NOT_FOUND)
@@ -71,14 +71,14 @@ class UserApiSpec extends CommonTest {
                     .post(USERS_PATH)
 
             def body = response.jsonPath()
-            def id = body.getString("userId")
+            def id = body.getUUID("userId")
 
         then:
             response.statusCode() == 201
 
         and:
             with(body) {
-                getString("userId") != null
+                getUUID("userId") != null
                 getString("userName") == userName
             }
 
@@ -115,18 +115,18 @@ class UserApiSpec extends CommonTest {
             def userId = getUserIdByUserName(userName)
 
         when:
-            def deleteResponse = RestAssured.delete(USERS_PATH + "/%s".formatted(userId))
+            def deleteResponse = RestAssured.delete(USERS_PATH + "/%s".formatted(userId.toString()))
 
         then:
             deleteResponse.statusCode() == 202
 
         and:
-            !repository.findById(userId as String).isPresent()
+            !repository.findById(UUID.fromString(userId)).isPresent()
     }
 
     def "delete user when not exist should throw not found error"() {
         when:
-            def deleteResponse = RestAssured.delete(USERS_PATH + "/notExistingUserId")
+            def deleteResponse = RestAssured.delete(USERS_PATH + "/" + UUID.randomUUID().toString())
 
         then:
             deleteResponse.statusCode() == 404

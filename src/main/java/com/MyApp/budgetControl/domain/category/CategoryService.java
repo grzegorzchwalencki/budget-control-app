@@ -3,6 +3,7 @@ package com.MyApp.budgetControl.domain.category;
 import com.MyApp.budgetControl.domain.category.dto.CategoryRequestDTO;
 import com.MyApp.budgetControl.domain.category.dto.CategoryResponseDTO;
 import java.util.List;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +23,7 @@ public class CategoryService {
     return categoryRepository.findAll().stream().map(CategoryResponseDTO::new).toList();
   }
 
-  public CategoryEntity findCategoryById(String categoryId) {
+  public CategoryEntity findCategoryById(UUID categoryId) {
     return categoryRepository.findById(categoryId).get();
   }
 }

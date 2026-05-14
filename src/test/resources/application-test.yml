@@ -1,8 +1,13 @@
 spring:
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create-drop
 
   flyway:
     enabled: false
+
+  web:
+    error:
+      include-message: always
+      include-stacktrace: always
 

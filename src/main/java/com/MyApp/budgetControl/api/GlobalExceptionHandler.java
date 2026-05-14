@@ -17,7 +17,7 @@ class GlobalExceptionHandler {
 
   public static String notFoundMessage = "Element with given Id does not exist";
   public static String conflictMessage = "Name is already used. Please choose a different one";
-  public static String unknownErrorMessage = "Unknown error occured";
+  public static String unknownErrorMessage = "Unknown error occurred";
 
   @ResponseStatus(HttpStatus.BAD_REQUEST)
   @ExceptionHandler(value = MethodArgumentNotValidException.class)
