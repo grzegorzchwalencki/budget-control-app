@@ -41,16 +41,8 @@ public class ServicesOrchestrator {
     CategoryEntity category = categoryService.findCategoryById(expenseRequestDTO.categoryId());
     UserEntity user = userService.findUserById(expenseRequestDTO.userId());
     ExpenseEntity savedExpense = expenseService.saveExpense(expenseRequestDTO, category, user);
-//    return new ExpenseResponseDTO(savedExpense);
-    return new ExpenseResponseDTO(
-        savedExpense.getExpenseId(),
-        savedExpense.getExpenseCost(),
-        savedExpense.getCategoryId().getCategoryId(),
-        savedExpense.getExpenseComment(),
-        savedExpense.getExpenseDate(),
-        savedExpense.getUserId().getUserId()
-    );
 
+    return new ExpenseResponseDTO(savedExpense);
   }
 
 
