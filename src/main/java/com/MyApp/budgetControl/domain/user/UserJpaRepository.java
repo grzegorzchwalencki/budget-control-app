@@ -13,6 +13,8 @@ interface UserJpaRepository extends UserRepository, JpaRepository<UserEntity, UU
 
   Optional<UserEntity> findById(UUID userId);
 
+  Optional<UserEntity> findByUserName(String userName);
+
   void deleteById(UUID userId);
 
 }

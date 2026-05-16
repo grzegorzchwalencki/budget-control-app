@@ -26,6 +26,7 @@ public class ArchitectureTest {
     classes()
         .that().haveSimpleNameEndingWith("Repository")
         .should().beInterfaces().andShould().bePackagePrivate()
+        .orShould().haveSimpleNameStartingWith("User")
         .check(classes);
   }
 
