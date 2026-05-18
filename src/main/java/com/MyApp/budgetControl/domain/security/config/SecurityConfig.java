@@ -1,4 +1,4 @@
-package com.MyApp.budgetControl.domain.security;
+package com.MyApp.budgetControl.domain.security.config;
 
 import java.util.HashMap;
 import java.util.Map;
