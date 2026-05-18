@@ -1,15 +1,15 @@
 package com.MyApp.budgetControl.domain.user;
 
 import com.MyApp.budgetControl.domain.expense.ExpenseEntity;
-import com.MyApp.budgetControl.domain.security.RoleType;
+import com.MyApp.budgetControl.domain.user.credentials.UserCredentials;
 import com.MyApp.budgetControl.domain.user.dto.UserRequestDTO;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -36,8 +36,7 @@ public class UserEntity {
   UserEntity(UserRequestDTO userRequestDTO) {
     this.userId = UUID.randomUUID();
     this.userName = userRequestDTO.userName();
-    this.password = "password";
-    this.role = RoleType.USER;
+    this.userCredentials = new UserCredentials(userRequestDTO.userPassword(), userRequestDTO.role());
     this.userEmail = userRequestDTO.userEmail();
     this.userExpenses = Collections.emptyList();
   }
@@ -50,11 +49,9 @@ public class UserEntity {
   @Column(nullable = false, unique = true)
   String userName;
 
-  @Column(nullable = false)
-  String password;
-
-  @Enumerated(EnumType.STRING)
-  RoleType role;
+  @NotBlank
+  @OneToOne(mappedBy = "userId", cascade = CascadeType.ALL)
+  UserCredentials userCredentials;
 
   @Email
   @NotBlank(message = "Email address is mandatory")
